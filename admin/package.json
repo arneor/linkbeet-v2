@@ -22,7 +22,6 @@
     "@hookform/resolvers": "^3.9.0",
     "@linkbeet/types": "workspace:*",
     "@linkbeet/ui": "workspace:*",
-    "@sentry/nextjs": "^10.47.0",
     "@tanstack/react-query": "^5.56.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
