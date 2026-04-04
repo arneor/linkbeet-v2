@@ -22,14 +22,6 @@
       "dependsOn": [],
       "outputs": ["coverage/**"]
     },
-    "test:e2e": {
-      "dependsOn": ["build"],
-      "cache": false
-    },
-    "test:smoke": {
-      "dependsOn": ["build"],
-      "cache": false
-    },
     "lint:fix": {
       "cache": false
     },

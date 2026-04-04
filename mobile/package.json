@@ -11,11 +11,6 @@
     "web": "expo start --web",
     "lint": "eslint \"**/*.{ts,tsx}\"",
     "clean": "rm -rf node_modules/.cache",
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage",
-    "test:e2e:ios": "detox test --configuration ios.sim.debug",
-    "test:e2e:android": "detox test --configuration android.emu.debug",
     "lint:fix": "eslint --fix \"**/*.{ts,tsx}\"",
     "format": "prettier --write \"**/*.{ts,tsx}\"",
     "format:check": "prettier --check \"**/*.{ts,tsx}\""
@@ -37,17 +32,12 @@
   "devDependencies": {
     "@babel/core": "^7.25.0",
     "@babel/runtime": "^7.25.0",
-    "@testing-library/react-native": "^13.3.3",
-    "@types/jest": "^30.0.0",
     "@types/react": "~18.3.12",
     "babel-preset-expo": "~12.0.0",
-    "detox": "^20.50.1",
     "eslint": "^9.20.0",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-native": "^5.0.0",
-    "jest": "^30.3.0",
-    "jest-expo": "^55.0.13",
     "typescript": "^5.3.3"
   }
 }
