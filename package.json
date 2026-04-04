@@ -1,27 +1,40 @@
 {
   "name": "linkbeet-v2",
-  "version": "0.0.1",
+  "version": "0.0.0",
   "private": true,
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "lint:fix": "turbo run lint:fix",
+    "test": "turbo run test",
+    "test:coverage": "turbo run test:coverage",
+    "test:e2e": "turbo run test:e2e",
+    "test:smoke": "turbo run test:smoke",
+    "clean": "turbo run clean && rm -rf node_modules",
+    "format": "turbo run format",
+    "format:check": "turbo run format:check",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^20.5.0",
+    "@commitlint/config-conventional": "^20.5.0",
+    "@eslint/js": "^9.20.0",
+    "eslint": "^9.39.4",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-import-x": "^4.16.2",
+    "eslint-plugin-prettier": "^5.5.5",
+    "eslint-plugin-unused-imports": "^4.4.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0",
+    "prettier": "^3.3.3",
+    "turbo": "latest",
+    "typescript": "^5.5.3",
+    "typescript-eslint": "^8.58.0"
+  },
   "engines": {
     "node": ">=20",
     "pnpm": ">=9"
   },
-  "scripts": {
-    "build": "turbo run build",
-    "dev": "turbo run dev",
-    "lint": "turbo run lint",
-    "format": "turbo run format",
-    "clean": "turbo run clean && rm -rf node_modules",
-    "typecheck": "turbo run typecheck"
-  },
-  "devDependencies": {
-    "turbo": "^2.3.3",
-    "typescript": "^5.7.3",
-    "prettier": "^3.4.2"
-  },
-  "packageManager": "pnpm@10.33.0",
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ]
+  "packageManager": "pnpm@10.33.0"
 }

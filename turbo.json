@@ -14,11 +14,30 @@
     "lint": {
       "dependsOn": ["^lint"]
     },
-    "typecheck": {
-      "dependsOn": ["^typecheck"]
+    "test": {
+      "dependsOn": [],
+      "outputs": ["coverage/**"]
+    },
+    "test:coverage": {
+      "dependsOn": [],
+      "outputs": ["coverage/**"]
+    },
+    "test:e2e": {
+      "dependsOn": ["build"],
+      "cache": false
+    },
+    "test:smoke": {
+      "dependsOn": ["build"],
+      "cache": false
+    },
+    "lint:fix": {
+      "cache": false
     },
     "format": {
       "cache": false
+    },
+    "format:check": {
+      "outputs": []
     },
     "clean": {
       "cache": false

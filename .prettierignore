@@ -1,0 +1,13 @@
+node_modules
+.next
+.turbo
+dist
+build
+coverage
+.expo
+android
+ios
+*.lock
+pnpm-lock.yaml
+*.generated.*
+shared/db/prisma/migrations

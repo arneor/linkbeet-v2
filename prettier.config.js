@@ -1,9 +1,23 @@
+/** @type {import("prettier").Config} */
 module.exports = {
-  semi: true,
+  semi: false,
   singleQuote: true,
-  trailingComma: 'es5',
+  trailingComma: 'all',
   printWidth: 100,
   tabWidth: 2,
   useTabs: false,
-  plugins: ['prettier-plugin-tailwindcss'],
-};
+  bracketSpacing: true,
+  bracketSameLine: false,
+  arrowParens: 'always',
+  endOfLine: 'lf',
+  overrides: [
+    {
+      files: '*.json',
+      options: { printWidth: 200 },
+    },
+    {
+      files: '*.md',
+      options: { proseWrap: 'always' },
+    },
+  ],
+}

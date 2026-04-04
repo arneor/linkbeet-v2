@@ -1,0 +1,59 @@
+name: Payment API CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "api/payment/**"
+
+jobs:
+  ci:
+    name: Install, Lint & Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "pnpm"
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Check formatting
+        run: pnpm format:check
+
+      - name: Lint
+        run: pnpm --filter @linkbeet/api-payment lint
+
+      - name: Build
+        run: pnpm --filter @linkbeet/api-payment build
+
+  test:
+    name: Unit & Integration Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "pnpm"
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Test Coverage
+        run: pnpm --filter @linkbeet/api-payment test:coverage
+        env:
+          APP_ENV: staging
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
