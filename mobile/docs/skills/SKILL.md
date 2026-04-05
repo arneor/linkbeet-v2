@@ -98,79 +98,59 @@ Tool: React Query                   Tool: Zustand
 ## 2. Folder Structure
 
 ```
-mobile/
-│
-├── app/                            ← Expo Router — NAVIGATION ONLY
-│   ├── (auth)/
-│   │   ├── _layout.tsx
-│   │   ├── login.tsx               ← one line: <LoginScreen />
-│   │   └── register.tsx            ← one line: <RegisterScreen />
-│   ├── (tabs)/
-│   │   ├── _layout.tsx
-│   │   ├── index.tsx               ← one line: <HomeScreen />
-│   │   ├── explore.tsx
-│   │   └── profile.tsx
-│   ├── [username].tsx              ← one line: <BiolinkScreen />
-│   ├── _layout.tsx                 ← root layout — providers only
-│   └── index.tsx
-│
-├── src/
-│   │
-│   ├── features/                   ← ALL product features
-│   │   ├── auth/
-│   │   ├── biolink/
-│   │   ├── profile/
-│   │   ├── links/
-│   │   ├── analytics/
-│   │   └── settings/
-│   │
-│   ├── core/                       ← Shared infrastructure
-│   │   ├── api/
-│   │   │   ├── client.ts           ← axios instance + interceptors
-│   │   │   └── endpoints.ts        ← all API endpoint strings
-│   │   ├── storage/
-│   │   │   └── secure-storage.ts   ← expo-secure-store wrapper
-│   │   ├── errors/
-│   │   │   └── app-error.ts        ← single error class
-│   │   ├── hooks/
-│   │   │   └── use-app-state.ts    ← app-wide hooks
-│   │   ├── theme/
-│   │   │   ├── colors.ts
-│   │   │   ├── typography.ts
-│   │   │   ├── spacing.ts
-│   │   │   └── index.ts
-│   │   └── utils/
-│   │       ├── format.ts
-│   │       └── validators.ts
-│   │
-│   ├── components/                 ← Shared UI components (2+ features)
-│   │   ├── Button/
-│   │   │   ├── Button.tsx
-│   │   │   ├── Button.types.ts
-│   │   │   └── index.ts
-│   │   ├── Input/
-│   │   ├── Card/
-│   │   ├── Modal/
-│   │   ├── Avatar/
-│   │   └── Loading/
-│   │
-│   ├── store/                      ← Global client state (Zustand)
-│   │   └── app.store.ts            ← theme, language, onboarding
-│   │
-│   └── providers/                  ← React providers
-│       └── AppProviders.tsx
-│
-├── assets/
-│   ├── fonts/
-│   ├── images/
-│   └── icons/
-│
-├── .env.development
-├── .env.staging
-├── .env.production
-├── .env.example
-├── eas.json
-└── app.json
+  mobile/
+  ├── app/                    ← Expo Router — navigation only
+  │   ├── (auth)/
+  │   ├── (tabs)/
+  │   ├── [username].tsx
+  │   ├── _layout.tsx
+  │   └── index.tsx
+  │
+  ├── src/
+  │   ├── features/           ← ALL product features
+  │   │   └── [feature]/
+  │   │       ├── components/
+  │   │       ├── screens/
+  │   │       ├── services/   ← API calls (was api/)
+  │   │       ├── hooks/      ← React Query hooks
+  │   │       ├── store/      ← Zustand store
+  │   │       ├── types/      ← Feature TypeScript types
+  │   │       ├── constants/  ← Feature constants
+  │   │       ├── utils/      ← Feature utilities
+  │   │       └── index.ts    ← Public API exports
+  │   │
+  │   ├── shared/             ← Cross-cutting concerns
+  │   │   ├── components/     ← Reusable UI components
+  │   │   ├── hooks/          ← Generic hooks
+  │   │   ├── services/
+  │   │   │   ├── api/        ← API client + interceptors
+  │   │   │   ├── analytics/
+  │   │   │   └── storage/    ← Secure storage wrapper
+  │   │   ├── utils/
+  │   │   │   ├── formatters/ ← Date, currency, string
+  │   │   │   ├── validators/ ← Email, phone, password
+  │   │   │   └── platform/   ← iOS/Android helpers
+  │   │   ├── types/          ← Shared type definitions
+  │   │   └── constants/      ← Theme, colors, spacing
+  │   │
+  │   ├── config/             ← Environment & feature config
+  │   │   ├── env.ts
+  │   │   ├── settings.ts
+  │   │   └── feature-flags.ts
+  │   │
+  │   ├── core/               ← Core error handling only
+  │   │   └── errors/
+  │   │
+  │   ├── store/              ← Global app state (Zustand)
+  │   └── providers/          ← React providers
+  │
+  ├── __tests__/              ← Tests mirror src/ structure
+  │   ├── features/
+  │   ├── shared/
+  │   ├── e2e/
+  │   └── setup/
+  │
+  └── assets/
 ```
 
 ---
@@ -1065,21 +1045,26 @@ QUALITY GATE
 ```
 "Where does this code go?"
 ───────────────────────────────────────────────────────
-Raw API call              → features/[f]/api/[f].api.ts
-Zod schema                → features/[f]/api/[f].schema.ts
-Server data + fetching    → features/[f]/hooks/use-[x].ts
-UI / client state         → features/[f]/store/[f].store.ts
-Screen                    → features/[f]/screens/[Name]Screen.tsx
-Feature component         → features/[f]/components/[Name].tsx
-Shared component 2+       → src/components/[Name]/
-Route file                → app/
-API client + interceptors → core/api/client.ts
-All endpoint strings      → core/api/endpoints.ts
-Secure token storage      → core/storage/secure-storage.ts
-Error class               → core/errors/app-error.ts
-Theme / colors / spacing  → core/theme/
-Global UI state           → src/store/app.store.ts
-All providers             → src/providers/AppProviders.tsx
+Raw API call          → features/[f]/services/[f].service.ts
+React Query hooks     → features/[f]/hooks/use-[x].ts
+Feature types         → features/[f]/types/
+Feature constants     → features/[f]/constants/
+Zustand store         → features/[f]/store/[f].store.ts
+Screen                → features/[f]/screens/[Name]Screen.tsx
+Feature component     → features/[f]/components/[Name].tsx
+Shared component 2+   → src/shared/components/[Name]/
+API client setup      → src/shared/services/api/
+Secure storage        → src/shared/services/storage/
+Generic hooks         → src/shared/hooks/
+Formatters/validators → src/shared/utils/
+Theme/colors/spacing  → src/shared/constants/
+Env config            → src/config/env.ts
+Feature flags         → src/config/feature-flags.ts
+App settings          → src/config/settings.ts
+Error classes         → src/core/errors/
+Global UI state       → src/store/app.store.ts
+All providers         → src/providers/AppProviders.tsx
+Route files           → app/
 ───────────────────────────────────────────────────────
 
 "Which tool for which state?"
