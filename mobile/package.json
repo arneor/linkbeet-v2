@@ -2,7 +2,7 @@
   "name": "@linkbeet/mobile",
   "version": "1.0.0",
   "private": true,
-  "main": "index.ts",
+  "main": "expo-router/entry",
   "scripts": {
     "start": "expo start",
     "dev": "expo start",
@@ -22,7 +22,9 @@
   "dependencies": {
     "@expo/metro-runtime": "~6.1.2",
     "@hookform/resolvers": "^3.9.0",
+    "@linkbeet/constants": "workspace:*",
     "@linkbeet/types": "workspace:*",
+    "@linkbeet/utils": "workspace:*",
     "@linkbeet/validations": "workspace:*",
     "@tanstack/react-query": "^5.56.2",
     "expo": "~54.0.0",

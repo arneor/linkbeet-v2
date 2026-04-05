@@ -56,12 +56,18 @@ importers:
       '@hookform/resolvers':
         specifier: ^5.2.2
         version: 5.2.2(react-hook-form@7.72.1(react@19.2.4))
+      '@linkbeet/constants':
+        specifier: workspace:*
+        version: link:../shared/constants
       '@linkbeet/types':
         specifier: workspace:*
         version: link:../shared/types
       '@linkbeet/ui':
         specifier: workspace:*
         version: link:../shared/ui
+      '@linkbeet/utils':
+        specifier: workspace:*
+        version: link:../shared/utils
       '@tanstack/react-query':
         specifier: ^5.96.2
         version: 5.96.2(react@19.2.4)
@@ -781,9 +787,15 @@ importers:
       '@hookform/resolvers':
         specifier: ^3.9.0
         version: 3.10.0(react-hook-form@7.72.1(react@19.2.4))
+      '@linkbeet/constants':
+        specifier: workspace:*
+        version: link:../shared/constants
       '@linkbeet/types':
         specifier: workspace:*
         version: link:../shared/types
+      '@linkbeet/utils':
+        specifier: workspace:*
+        version: link:../shared/utils
       '@linkbeet/validations':
         specifier: workspace:*
         version: link:../shared/validations
@@ -853,6 +865,12 @@ importers:
         version: 5.0.0(eslint@9.39.4(jiti@2.6.1))
       typescript:
         specifier: ^5.3.3
+        version: 5.9.3
+
+  shared/constants:
+    devDependencies:
+      typescript:
+        specifier: '*'
         version: 5.9.3
 
   shared/db:
@@ -951,6 +969,12 @@ importers:
         specifier: ^8.58.0
         version: 8.58.0(eslint@9.39.4(jiti@2.6.1))(typescript@5.9.3)
 
+  shared/utils:
+    devDependencies:
+      typescript:
+        specifier: '*'
+        version: 5.9.3
+
   shared/validations:
     dependencies:
       zod:
@@ -981,6 +1005,9 @@ importers:
       '@hookform/resolvers':
         specifier: ^5.2.2
         version: 5.2.2(react-hook-form@7.72.1(react@19.2.4))
+      '@linkbeet/constants':
+        specifier: workspace:*
+        version: link:../shared/constants
       '@linkbeet/db':
         specifier: workspace:*
         version: link:../shared/db
@@ -990,6 +1017,9 @@ importers:
       '@linkbeet/ui':
         specifier: workspace:*
         version: link:../shared/ui
+      '@linkbeet/utils':
+        specifier: workspace:*
+        version: link:../shared/utils
       '@linkbeet/validations':
         specifier: workspace:*
         version: link:../shared/validations

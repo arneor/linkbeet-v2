@@ -43,7 +43,6 @@ export const loggerConfig: Params = {
     },
 
     // Add request id to every log
-    genReqId: (req: { headers: Record<string, string | undefined> }) =>
-      req.headers['x-request-id'] || crypto.randomUUID(),
+    genReqId: (req: any) => req.headers['x-request-id'] || crypto.randomUUID(),
   },
 }

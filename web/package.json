@@ -18,9 +18,11 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
+    "@linkbeet/constants": "workspace:*",
     "@linkbeet/db": "workspace:*",
     "@linkbeet/types": "workspace:*",
     "@linkbeet/ui": "workspace:*",
+    "@linkbeet/utils": "workspace:*",
     "@linkbeet/validations": "workspace:*",
     "@prisma/client": "^6.6.0",
     "@tanstack/react-query": "^5.96.2",

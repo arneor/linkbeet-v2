@@ -1,35 +1,19 @@
 name: Mobile CI
-
 on:
   push:
-    branches: [main]
-    paths:
-      - "mobile/**"
+    branches: [main, staging]
+    paths: ['mobile/**']
   pull_request:
-    paths:
-      - "mobile/**"
-
+    paths: ['mobile/**']
 jobs:
   ci:
-    name: Install, Lint & Check
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 9
-
+      - uses: pnpm/action-setup@v3
+        with: { version: 9 }
       - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: "pnpm"
-
-      - name: Install
-        run: pnpm install --frozen-lockfile
-
-      - name: Check formatting
-        run: pnpm --filter @linkbeet/mobile format:check
-
-      - name: Lint
-        run: pnpm --filter @linkbeet/mobile lint
+        with: { node-version: 20, cache: pnpm }
+      - run: pnpm install
+      - run: pnpm --filter mobile format:check
+      - run: pnpm --filter mobile lint

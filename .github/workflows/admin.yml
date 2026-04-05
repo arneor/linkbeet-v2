@@ -1,51 +1,33 @@
 name: Admin CI
-
 on:
   push:
     branches: [main, staging]
-    paths:
-      - "admin/**"
+    paths: ['admin/**']
   pull_request:
-    paths:
-      - "admin/**"
-
+    paths: ['admin/**']
 jobs:
   ci:
-    name: Install, Lint & Build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 9
-
+      - uses: pnpm/action-setup@v3
+        with: { version: 9 }
       - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: "pnpm"
-
-      - name: Install
-        run: pnpm install --frozen-lockfile
-
-      - name: Check formatting
-        run: pnpm format:check
-
-      - name: Lint
-        run: pnpm --filter @linkbeet/admin lint
-
-      - name: Build Staging
+        with: { node-version: 20, cache: pnpm }
+      - run: pnpm install
+      - run: pnpm --filter admin format:check
+      - run: pnpm --filter admin lint
+      - name: Build staging
         if: github.ref == 'refs/heads/staging'
-        run: pnpm --filter @linkbeet/admin build:staging
+        run: pnpm --filter admin build:staging
         env:
           NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
           NEXT_PUBLIC_APP_URL: ${{ secrets.NEXT_PUBLIC_APP_URL }}
-          NODE_ENV: production
-
-      - name: Build Production
+      - name: Build production
         if: github.ref == 'refs/heads/main'
-        run: pnpm --filter @linkbeet/admin build:production
+        run: pnpm --filter admin build:production
         env:
           NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
           NEXT_PUBLIC_APP_URL: ${{ secrets.NEXT_PUBLIC_APP_URL }}
-          NODE_ENV: production

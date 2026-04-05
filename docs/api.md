@@ -1,133 +1,19 @@
-# Linkbeet API Documentation
+# Linkbeet V2 — API Documentation
 
-## Base URL
+All APIs are accessible via Kong API Gateway at port 8000.
 
-All API requests go through the Kong API Gateway:
+## Auth endpoints
 
-```
-http://localhost:8000/api/v1
-```
+POST /auth/login POST /auth/register POST /auth/logout POST /auth/refresh GET /auth/me
 
-## Authentication
+## Profile endpoints
 
-All protected endpoints require a Bearer token:
+GET /profile/:username PATCH /profile
 
-```
-Authorization: Bearer <access_token>
-```
+## Links endpoints
 
----
+GET /links POST /links PATCH /links/:id DELETE /links/:id PUT /links/reorder
 
-## Auth Service (port 3001)
+## Analytics endpoints
 
-### POST /api/v1/auth/register
-
-Register a new user.
-
-**Body:**
-
-```json
-{
-  "email": "user@example.com",
-  "username": "johndoe",
-  "password": "SecurePass1",
-  "name": "John Doe"
-}
-```
-
-### POST /api/v1/auth/login
-
-Login and receive JWT tokens.
-
-### POST /api/v1/auth/refresh
-
-Refresh access token using refresh token.
-
-### POST /api/v1/auth/logout
-
-Invalidate refresh token.
-
----
-
-## Profile Service (port 3002)
-
-### GET /api/v1/profiles/:username
-
-Get public profile by username.
-
-### GET /api/v1/profile/me _(auth required)_
-
-Get current user's profile.
-
-### PATCH /api/v1/profile/me _(auth required)_
-
-Update profile.
-
-### POST /api/v1/profile/me/links _(auth required)_
-
-Add a new link to profile.
-
-### PATCH /api/v1/profile/me/links/:id _(auth required)_
-
-Update a link.
-
-### DELETE /api/v1/profile/me/links/:id _(auth required)_
-
-Delete a link.
-
----
-
-## Search Service (port 3003)
-
-### GET /api/v1/search?q=:query
-
-Search profiles and links.
-
----
-
-## Analytics Service (port 3007)
-
-### GET /api/v1/analytics/overview _(auth required)_
-
-Get overview stats for current user.
-
-### GET /api/v1/analytics/clicks _(auth required)_
-
-Get link click analytics.
-
----
-
-## Response Format
-
-All responses follow this format:
-
-```json
-{
-  "success": true,
-  "data": {},
-  "error": null,
-  "message": null,
-  "statusCode": 200
-}
-```
-
-## Pagination
-
-Paginated endpoints accept:
-
-- `page` (default: 1)
-- `limit` (default: 20, max: 100)
-
-Response includes:
-
-```json
-{
-  "data": [],
-  "total": 100,
-  "page": 1,
-  "limit": 20,
-  "totalPages": 5,
-  "hasNextPage": true,
-  "hasPrevPage": false
-}
-```
+GET /analytics/overview GET /analytics/clicks
