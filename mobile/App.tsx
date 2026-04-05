@@ -1,13 +1,6 @@
 import { StatusBar } from 'expo-status-bar'
-import {
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  TouchableOpacity,
-  ScrollView,
-  SafeAreaView,
-} from 'react-native'
+import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView } from 'react-native'
+import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context'
 
 /// Option 1: From the root of the monorepo
 //
@@ -26,93 +19,95 @@ import {
 
 export default function App() {
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <StatusBar style="dark" />
-      <ScrollView contentContainerStyle={styles.container}>
-        {/* Header Section */}
-        <View style={styles.header}>
-          <Image source={{ uri: 'https://i.pravatar.cc/150?img=68' }} style={styles.avatar} />
-          <View style={styles.headerTextContainer}>
-            <Text style={styles.greeting}>Hello, creator! 👋</Text>
-            <Text style={styles.username}>@linkbeet_user</Text>
+    <SafeAreaProvider>
+      <SafeAreaView style={styles.safeArea}>
+        <StatusBar style="dark" />
+        <ScrollView contentContainerStyle={styles.container}>
+          {/* Header Section */}
+          <View style={styles.header}>
+            <Image source={{ uri: 'https://i.pravatar.cc/150?img=68' }} style={styles.avatar} />
+            <View style={styles.headerTextContainer}>
+              <Text style={styles.greeting}>Hello, creator! 👋</Text>
+              <Text style={styles.username}>@linkbeet_user</Text>
+            </View>
+            <TouchableOpacity style={styles.settingsButton}>
+              <Text style={styles.icon20}>⚙️</Text>
+            </TouchableOpacity>
           </View>
-          <TouchableOpacity style={styles.settingsButton}>
-            <Text style={styles.icon20}>⚙️</Text>
+
+          {/* Stats Grid */}
+          <Text style={styles.sectionTitle}>Overview</Text>
+          <View style={styles.statsGrid}>
+            <View style={[styles.statCard, styles.bgBlue]}>
+              <Text style={styles.icon24}>👁️</Text>
+              <Text style={styles.statValue}>12.4k</Text>
+              <Text style={styles.statLabel}>Total Views</Text>
+            </View>
+            <View style={[styles.statCard, styles.bgGreen]}>
+              <Text style={styles.icon24}>🖱️</Text>
+              <Text style={styles.statValue}>3.2k</Text>
+              <Text style={styles.statLabel}>Total Clicks</Text>
+            </View>
+          </View>
+
+          {/* Actions */}
+          <TouchableOpacity style={styles.primaryButton}>
+            <Text style={styles.primaryButtonIcon}>➕</Text>
+            <Text style={styles.primaryButtonText}>Create New Link</Text>
           </TouchableOpacity>
-        </View>
 
-        {/* Stats Grid */}
-        <Text style={styles.sectionTitle}>Overview</Text>
-        <View style={styles.statsGrid}>
-          <View style={[styles.statCard, styles.bgBlue]}>
-            <Text style={styles.icon24}>👁️</Text>
-            <Text style={styles.statValue}>12.4k</Text>
-            <Text style={styles.statLabel}>Total Views</Text>
+          {/* Links List */}
+          <View style={styles.linksHeader}>
+            <Text style={styles.sectionTitle}>Your Links</Text>
+            <TouchableOpacity>
+              <Text style={styles.seeAllText}>See All</Text>
+            </TouchableOpacity>
           </View>
-          <View style={[styles.statCard, styles.bgGreen]}>
-            <Text style={styles.icon24}>🖱️</Text>
-            <Text style={styles.statValue}>3.2k</Text>
-            <Text style={styles.statLabel}>Total Clicks</Text>
-          </View>
-        </View>
 
-        {/* Actions */}
-        <TouchableOpacity style={styles.primaryButton}>
-          <Text style={styles.primaryButtonIcon}>➕</Text>
-          <Text style={styles.primaryButtonText}>Create New Link</Text>
-        </TouchableOpacity>
+          <View style={styles.linkItem}>
+            <View style={styles.linkIconContainer}>
+              <Text style={styles.icon20}>📸</Text>
+            </View>
+            <View style={styles.linkDetails}>
+              <Text style={styles.linkTitle}>Instagram Profile</Text>
+              <Text style={styles.linkUrl}>instagram.com/linkbeet</Text>
+            </View>
+            <View style={styles.linkStats}>
+              <Text style={styles.linkClicks}>1.2k</Text>
+              <Text style={styles.statsIconSmall}>📊</Text>
+            </View>
+          </View>
 
-        {/* Links List */}
-        <View style={styles.linksHeader}>
-          <Text style={styles.sectionTitle}>Your Links</Text>
-          <TouchableOpacity>
-            <Text style={styles.seeAllText}>See All</Text>
-          </TouchableOpacity>
-        </View>
+          <View style={styles.linkItem}>
+            <View style={styles.linkIconContainer}>
+              <Text style={styles.icon20}>🌐</Text>
+            </View>
+            <View style={styles.linkDetails}>
+              <Text style={styles.linkTitle}>My Portfolio</Text>
+              <Text style={styles.linkUrl}>portfolio.com/me</Text>
+            </View>
+            <View style={styles.linkStats}>
+              <Text style={styles.linkClicks}>850</Text>
+              <Text style={styles.statsIconSmall}>📊</Text>
+            </View>
+          </View>
 
-        <View style={styles.linkItem}>
-          <View style={styles.linkIconContainer}>
-            <Text style={styles.icon20}>📸</Text>
+          <View style={styles.linkItem}>
+            <View style={styles.linkIconContainer}>
+              <Text style={styles.icon20}>▶️</Text>
+            </View>
+            <View style={styles.linkDetails}>
+              <Text style={styles.linkTitle}>Latest Vlog</Text>
+              <Text style={styles.linkUrl}>youtube.com/watch?v=...</Text>
+            </View>
+            <View style={styles.linkStats}>
+              <Text style={styles.linkClicks}>520</Text>
+              <Text style={styles.statsIconSmall}>📊</Text>
+            </View>
           </View>
-          <View style={styles.linkDetails}>
-            <Text style={styles.linkTitle}>Instagram Profile</Text>
-            <Text style={styles.linkUrl}>instagram.com/linkbeet</Text>
-          </View>
-          <View style={styles.linkStats}>
-            <Text style={styles.linkClicks}>1.2k</Text>
-            <Text style={styles.statsIconSmall}>📊</Text>
-          </View>
-        </View>
-
-        <View style={styles.linkItem}>
-          <View style={styles.linkIconContainer}>
-            <Text style={styles.icon20}>🌐</Text>
-          </View>
-          <View style={styles.linkDetails}>
-            <Text style={styles.linkTitle}>My Portfolio</Text>
-            <Text style={styles.linkUrl}>portfolio.com/me</Text>
-          </View>
-          <View style={styles.linkStats}>
-            <Text style={styles.linkClicks}>850</Text>
-            <Text style={styles.statsIconSmall}>📊</Text>
-          </View>
-        </View>
-
-        <View style={styles.linkItem}>
-          <View style={styles.linkIconContainer}>
-            <Text style={styles.icon20}>▶️</Text>
-          </View>
-          <View style={styles.linkDetails}>
-            <Text style={styles.linkTitle}>Latest Vlog</Text>
-            <Text style={styles.linkUrl}>youtube.com/watch?v=...</Text>
-          </View>
-          <View style={styles.linkStats}>
-            <Text style={styles.linkClicks}>520</Text>
-            <Text style={styles.statsIconSmall}>📊</Text>
-          </View>
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+        </ScrollView>
+      </SafeAreaView>
+    </SafeAreaProvider>
   )
 }
 
