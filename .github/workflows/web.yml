@@ -2,7 +2,10 @@ name: Web CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, staging]
+    paths:
+      - "web/**"
+  pull_request:
     paths:
       - "web/**"
 
@@ -31,5 +34,20 @@ jobs:
       - name: Lint
         run: pnpm --filter @linkbeet/web lint
 
-      - name: Build
-        run: pnpm --filter @linkbeet/web build
+      - name: Build Staging
+        if: github.ref == 'refs/heads/staging'
+        run: pnpm --filter @linkbeet/web build:staging
+        env:
+          NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          NEXT_PUBLIC_APP_URL: ${{ secrets.NEXT_PUBLIC_APP_URL }}
+          NODE_ENV: production
+
+      - name: Build Production
+        if: github.ref == 'refs/heads/main'
+        run: pnpm --filter @linkbeet/web build:production
+        env:
+          NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          NEXT_PUBLIC_APP_URL: ${{ secrets.NEXT_PUBLIC_APP_URL }}
+          NODE_ENV: production

@@ -37,20 +37,20 @@ export default function App() {
             <Text style={styles.username}>@linkbeet_user</Text>
           </View>
           <TouchableOpacity style={styles.settingsButton}>
-            <Text style={{ fontSize: 20 }}>⚙️</Text>
+            <Text style={styles.icon20}>⚙️</Text>
           </TouchableOpacity>
         </View>
 
         {/* Stats Grid */}
         <Text style={styles.sectionTitle}>Overview</Text>
         <View style={styles.statsGrid}>
-          <View style={[styles.statCard, { backgroundColor: '#e0e7ff' }]}>
-            <Text style={{ fontSize: 24 }}>👁️</Text>
+          <View style={[styles.statCard, styles.bgBlue]}>
+            <Text style={styles.icon24}>👁️</Text>
             <Text style={styles.statValue}>12.4k</Text>
             <Text style={styles.statLabel}>Total Views</Text>
           </View>
-          <View style={[styles.statCard, { backgroundColor: '#dcfce7' }]}>
-            <Text style={{ fontSize: 24 }}>🖱️</Text>
+          <View style={[styles.statCard, styles.bgGreen]}>
+            <Text style={styles.icon24}>🖱️</Text>
             <Text style={styles.statValue}>3.2k</Text>
             <Text style={styles.statLabel}>Total Clicks</Text>
           </View>
@@ -58,7 +58,7 @@ export default function App() {
 
         {/* Actions */}
         <TouchableOpacity style={styles.primaryButton}>
-          <Text style={{ fontSize: 20, marginRight: 8 }}>➕</Text>
+          <Text style={styles.primaryButtonIcon}>➕</Text>
           <Text style={styles.primaryButtonText}>Create New Link</Text>
         </TouchableOpacity>
 
@@ -72,7 +72,7 @@ export default function App() {
 
         <View style={styles.linkItem}>
           <View style={styles.linkIconContainer}>
-            <Text style={{ fontSize: 20 }}>📸</Text>
+            <Text style={styles.icon20}>📸</Text>
           </View>
           <View style={styles.linkDetails}>
             <Text style={styles.linkTitle}>Instagram Profile</Text>
@@ -80,13 +80,13 @@ export default function App() {
           </View>
           <View style={styles.linkStats}>
             <Text style={styles.linkClicks}>1.2k</Text>
-            <Text style={{ fontSize: 12, color: '#6b7280' }}>📊</Text>
+            <Text style={styles.statsIconSmall}>📊</Text>
           </View>
         </View>
 
         <View style={styles.linkItem}>
           <View style={styles.linkIconContainer}>
-            <Text style={{ fontSize: 20 }}>🌐</Text>
+            <Text style={styles.icon20}>🌐</Text>
           </View>
           <View style={styles.linkDetails}>
             <Text style={styles.linkTitle}>My Portfolio</Text>
@@ -94,13 +94,13 @@ export default function App() {
           </View>
           <View style={styles.linkStats}>
             <Text style={styles.linkClicks}>850</Text>
-            <Text style={{ fontSize: 12, color: '#6b7280' }}>📊</Text>
+            <Text style={styles.statsIconSmall}>📊</Text>
           </View>
         </View>
 
         <View style={styles.linkItem}>
           <View style={styles.linkIconContainer}>
-            <Text style={{ fontSize: 20 }}>▶️</Text>
+            <Text style={styles.icon20}>▶️</Text>
           </View>
           <View style={styles.linkDetails}>
             <Text style={styles.linkTitle}>Latest Vlog</Text>
@@ -108,7 +108,7 @@ export default function App() {
           </View>
           <View style={styles.linkStats}>
             <Text style={styles.linkClicks}>520</Text>
-            <Text style={{ fontSize: 12, color: '#6b7280' }}>📊</Text>
+            <Text style={styles.statsIconSmall}>📊</Text>
           </View>
         </View>
       </ScrollView>
@@ -182,6 +182,26 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#4b5563',
     fontWeight: '500',
+  },
+  bgBlue: {
+    backgroundColor: '#e0e7ff',
+  },
+  bgGreen: {
+    backgroundColor: '#dcfce7',
+  },
+  icon20: {
+    fontSize: 20,
+  },
+  icon24: {
+    fontSize: 24,
+  },
+  primaryButtonIcon: {
+    fontSize: 20,
+    marginRight: 8,
+  },
+  statsIconSmall: {
+    fontSize: 12,
+    color: '#6b7280',
   },
   primaryButton: {
     backgroundColor: '#000000',

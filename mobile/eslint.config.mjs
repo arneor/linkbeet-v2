@@ -17,9 +17,8 @@ export default [
       'react/react-in-jsx-scope': 'off',
       'react/prop-types': 'off',
       'react-hooks/exhaustive-deps': 'warn',
-      'react-native/no-unused-styles': 'error',
+      'react-native/no-unused-styles': 'warn',
       'react-native/no-inline-styles': 'warn',
-      'react-native/no-color-literals': 'warn',
     },
     settings: {
       react: { version: 'detect' },

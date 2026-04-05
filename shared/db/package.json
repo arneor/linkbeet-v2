@@ -19,11 +19,11 @@
     "format:check": "prettier --check \"src/**/*.ts\""
   },
   "dependencies": {
-    "@prisma/client": "^5.19.1"
+    "@prisma/client": "^6.6.0"
   },
   "devDependencies": {
-    "@types/node": "^25.5.2",
-    "prisma": "^5.19.1",
-    "typescript": "^5.5.3"
+    "@types/node": "^22.15.2",
+    "prisma": "^6.6.0",
+    "typescript": "^5.8.3"
   }
 }

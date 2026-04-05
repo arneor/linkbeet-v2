@@ -38,7 +38,7 @@ export async function GET(_request: NextRequest): Promise<NextResponse> {
     const d = new Date(now)
     d.setDate(d.getDate() - (6 - i))
     return {
-      date: d.toISOString().split('T')[0]!,
+      date: d.toISOString().split('T')[0] || '',
       views: Math.floor(Math.random() * 200) + 50,
       clicks: Math.floor(Math.random() * 80) + 10,
     }

@@ -2,7 +2,10 @@ name: Admin CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, staging]
+    paths:
+      - "admin/**"
+  pull_request:
     paths:
       - "admin/**"
 
@@ -31,5 +34,18 @@ jobs:
       - name: Lint
         run: pnpm --filter @linkbeet/admin lint
 
-      - name: Build
-        run: pnpm --filter @linkbeet/admin build
+      - name: Build Staging
+        if: github.ref == 'refs/heads/staging'
+        run: pnpm --filter @linkbeet/admin build:staging
+        env:
+          NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
+          NEXT_PUBLIC_APP_URL: ${{ secrets.NEXT_PUBLIC_APP_URL }}
+          NODE_ENV: production
+
+      - name: Build Production
+        if: github.ref == 'refs/heads/main'
+        run: pnpm --filter @linkbeet/admin build:production
+        env:
+          NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
+          NEXT_PUBLIC_APP_URL: ${{ secrets.NEXT_PUBLIC_APP_URL }}
+          NODE_ENV: production

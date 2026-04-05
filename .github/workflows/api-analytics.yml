@@ -2,7 +2,7 @@ name: Analytics API CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, staging]
     paths:
       - "api/analytics/**"
 
@@ -31,8 +31,23 @@ jobs:
       - name: Lint
         run: pnpm --filter @linkbeet/api-analytics lint
 
-      - name: Build
-        run: pnpm --filter @linkbeet/api-analytics build
+      - name: Build Staging
+        if: github.ref == 'refs/heads/staging'
+        run: pnpm --filter @linkbeet/api-analytics build:staging
+        env:
+          APP_ENV: staging
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          REDIS_URL: ${{ secrets.REDIS_URL }}
+
+      - name: Build Production
+        if: github.ref == 'refs/heads/main'
+        run: pnpm --filter @linkbeet/api-analytics build:production
+        env:
+          APP_ENV: production
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          REDIS_URL: ${{ secrets.REDIS_URL }}
 
   test:
     name: Unit & Integration Tests

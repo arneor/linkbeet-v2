@@ -2,85 +2,58 @@ _format_version: "3.0"
 _transform: true
 
 services:
-  - name: auth-service
-    url: http://localhost:3001
+  - name: auth
+    url: http://host.docker.internal:3001
     routes:
-      - name: auth-routes
+      - name: auth-route
         paths:
-          - /api/v1/auth
-        strip_path: false
-    plugins:
-      - name: rate-limiting
-        config:
-          minute: 60
-          policy: local
-
-  - name: profile-service
-    url: http://localhost:3002
-    routes:
-      - name: profile-routes
-        paths:
-          - /api/v1/profile
-          - /api/v1/profiles
+          - /api/auth
         strip_path: false
 
-  - name: search-service
-    url: http://localhost:3003
+  - name: profile
+    url: http://host.docker.internal:3002
     routes:
-      - name: search-routes
+      - name: profile-route
         paths:
-          - /api/v1/search
+          - /api/profile
         strip_path: false
 
-  - name: catalog-service
-    url: http://localhost:3004
+  - name: search
+    url: http://host.docker.internal:3003
     routes:
-      - name: catalog-routes
+      - name: search-route
         paths:
-          - /api/v1/catalog
+          - /api/search
         strip_path: false
 
-  - name: booking-service
-    url: http://localhost:3005
+  - name: catalog
+    url: http://host.docker.internal:3004
     routes:
-      - name: booking-routes
+      - name: catalog-route
         paths:
-          - /api/v1/booking
-          - /api/v1/bookings
+          - /api/catalog
         strip_path: false
 
-  - name: payment-service
-    url: http://localhost:3006
+  - name: booking
+    url: http://host.docker.internal:3005
     routes:
-      - name: payment-routes
+      - name: booking-route
         paths:
-          - /api/v1/payment
-          - /api/v1/payments
+          - /api/booking
         strip_path: false
 
-  - name: analytics-service
-    url: http://localhost:3007
+  - name: payment
+    url: http://host.docker.internal:3006
     routes:
-      - name: analytics-routes
+      - name: payment-route
         paths:
-          - /api/v1/analytics
+          - /api/payment
         strip_path: false
 
-plugins:
-  - name: cors
-    config:
-      origins:
-        - "http://localhost:3000"
-        - "http://localhost:3010"
-      methods:
-        - GET
-        - POST
-        - PUT
-        - PATCH
-        - DELETE
-        - OPTIONS
-      headers:
-        - Accept
-        - Authorization
-        - Content-Type
-      credentials: true
+  - name: analytics
+    url: http://host.docker.internal:3007
+    routes:
+      - name: analytics-route
+        paths:
+          - /api/analytics
+        strip_path: false
