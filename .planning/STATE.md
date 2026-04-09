@@ -10,6 +10,7 @@ _Project memory — updated at each phase transition | PRD: v2.3_
 - **Current Phase**: 0 — Not started (just initialized)
 - **PRD Version**: v2.3 (April 2026)
 - **Target Launch**: July 2026 (Soft Launch)
+- **Build Approach**: **UI-first** — all screens (web + mobile together) before backend
 - **Next Action**: `/gsd-discuss-phase 1` → `/gsd-plan-phase 1` → `/gsd-execute-phase 1`
 
 ---
@@ -61,9 +62,13 @@ _Project memory — updated at each phase transition | PRD: v2.3_
 
 ## Active Blockers
 
-1. **Prisma schema empty** — nothing persists until schema defined (Phase 1)
-2. **Better Auth uses mock DB** — auth broken at runtime until Prisma adapter wired (Phase 1)
-3. **CORS wildcard** — security issue, must fix before production (Phase 1)
+1. **Prisma schema empty** — nothing persists until schema defined (Phase 10 — backend)
+2. **Better Auth uses mock DB** — auth broken at runtime until Prisma adapter wired (Phase 11 —
+   backend)
+3. **CORS wildcard** — security issue, must fix before production (Phase 10 — backend)
+
+> **Note**: These are NOT blockers for UI work. UI phases use mock/static data. Backend blockers
+> only apply to Part 2.
 
 ---
 
@@ -184,16 +189,30 @@ APP_PORT (3000), APP_ENV, FRONTEND_URL
 
 ## Phase Transition Log
 
-| Phase                                        | Status | Date       | Notes                                           |
-| -------------------------------------------- | ------ | ---------- | ----------------------------------------------- |
-| Legacy cleanup                               | ✅     | April 2026 | Microservices → monolith migration              |
-| GSD initialized                              | ✅     | April 2026 | Codebase mapped, planning aligned with PRD v2.3 |
-| 1 — Foundation & DB                          | ⬜     | —          |                                                 |
-| 2 — Auth & Accounts                          | ⬜     | —          |                                                 |
-| 3 — Profile & Connections                    | ⬜     | —          |                                                 |
-| 4 — Discovery & Search                       | ⬜     | —          |                                                 |
-| 5 — Mobile Foundation                        | ⬜     | —          |                                                 |
-| 6 — Admin, Ratings, Referrals, Notifications | ⬜     | —          |                                                 |
-| 7 — Infrastructure & CI/CD                   | ⬜     | —          |                                                 |
-| 8 — Commerce, Booking, Payments              | ⬜     | —          |                                                 |
-| 9 — CRM, Monetization, Polish                | ⬜     | —          |                                                 |
+### Part 1 — UI (screen-by-screen, web + mobile)
+
+| Phase                                          | Status | Date       | Notes                                           |
+| ---------------------------------------------- | ------ | ---------- | ----------------------------------------------- |
+| Legacy cleanup                                 | ✅     | April 2026 | Microservices → monolith migration              |
+| GSD initialized                                | ✅     | April 2026 | Codebase mapped, planning aligned with PRD v2.3 |
+| 1 — Design System & Shared UI                  | ⬜     | —          |                                                 |
+| 2 — Auth & Onboarding Screens                  | ⬜     | —          |                                                 |
+| 3 — Discovery & Search Screens                 | ⬜     | —          |                                                 |
+| 4 — Bio Profile Screens                        | ⬜     | —          |                                                 |
+| 5 — Account & Settings Screens                 | ⬜     | —          |                                                 |
+| 6 — Commerce & Booking Screens                 | ⬜     | —          |                                                 |
+| 7 — Connections, CRM & Social Screens          | ⬜     | —          |                                                 |
+| 8 — Ratings, Notifications & Analytics Screens | ⬜     | —          |                                                 |
+| 9 — Admin Panel Screens                        | ⬜     | —          |                                                 |
+
+### Part 2 — Backend (after ALL UI is done)
+
+| Phase                                       | Status | Date | Notes |
+| ------------------------------------------- | ------ | ---- | ----- |
+| 10 — Database Schema & Foundation           | ⬜     | —    |       |
+| 11 — Auth & Account Backend                 | ⬜     | —    |       |
+| 12 — Profile & Connections Backend          | ⬜     | —    |       |
+| 13 — Discovery & Search Backend             | ⬜     | —    |       |
+| 14 — Commerce, Booking & Payments Backend   | ⬜     | —    |       |
+| 15 — Ratings, Referral, CRM & Admin Backend | ⬜     | —    |       |
+| 16 — Infrastructure, CI/CD & Polish         | ⬜     | —    |       |
