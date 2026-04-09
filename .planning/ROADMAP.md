@@ -1,130 +1,211 @@
 # LinkBeet v2 — ROADMAP.md
 
-_Milestone: 1.0 — Phase 2 Core Build | Started: April 2026_
+_Milestone: 1.0 — Phase 2 Core Build | PRD: v2.3 | Target: July 2026 Soft Launch_
 
 ---
 
 ## Milestone Goal
 
-Turn the existing monolith scaffold into a fully functional platform — with working auth, profile,
-discovery, and a functional mobile app.
+Deliver a fully functional hyperlocal community commerce platform — anonymous-first discovery,
+bio-link profiles, Normal/Business mode commerce, bookings, payments, CRM, ratings, referrals,
+notifications, and a complete mobile + web + admin experience.
 
 ---
 
 ## Phase 1 — Foundation & Database Schema
 
-**Status**: ⬜ Not started **Goal**: Define all data models, get the database running, wire Redis
-and Better Auth properly.
+**Status**: ⬜ Not started **Goal**: Define all data models, wire database + Redis + auth properly,
+fix infrastructure gaps.
 
 ### Deliverables
 
-- Prisma schema with all core models (User, Profile, Link, Connection, Product, Order, Booking,
-  Payment, Wallet, Notification, Rating, Referral)
+- Prisma schema with ALL core models per PRD v2.3:
+  - `account` (mode: normal|business, industry tag, default_landing_screen, onboarding_completed)
+  - `catalogue_item` (type: product|service, account_id, name, photos JSONB, price, stock_quantity,
+    duration_minutes, category)
+  - `booking` (service catalogue_item_id, slot datetime, status lifecycle, reminder_sent)
+  - `order` (product catalogue_item_id, cart JSONB, payment_id, fulfilment status)
+  - `connection` (requester_id, recipient_id, status: pending|accepted|declined)
+  - `review` (booking_id OR order_id, star_rating, text, business_response, verified boolean)
+  - `referral` (referrer_account_id, referred_account_id, status: pending|converted,
+    reward_dispatched)
+  - `video_embed` (account_id, platform: youtube|instagram|tiktok, url, display_order)
+  - `notification`, `bookmark`, profile, link tables
+- PostGIS extension enabled (`CREATE EXTENSION postgis; CREATE EXTENSION postgis_topology;`)
 - Initial database migration
-- Dev seed script with realistic data
-- Redis service fully implemented (connection lifecycle, helpers for cache, pub/sub)
+- Dev seed script with realistic data (users, profiles, products, services, bookings, orders)
+- RedisService fully implemented (connection lifecycle, cache, pub/sub, Streams helpers)
 - Better Auth wired with Prisma adapter in `api/` + `web/`
 - CORS fixed — env-driven allowed origins list
-- `api/src/config/database.config.ts` — DATABASE_URL validation
 - All config modules validated at startup (fail-fast on missing required vars)
 
-**Requirements**: F-01, F-02, F-03, F-04, F-05, F-06
+**Requirements**: F-01 through F-07
 
 ---
 
-## Phase 2 — Auth Module
+## Phase 2 — Auth Module & Account System
 
-**Status**: ⬜ Not started **Depends on**: Phase 1 **Goal**: Full authentication system — register,
-login, JWT, refresh, logout.
+**Status**: ⬜ Not started **Depends on**: Phase 1 **Goal**: Full authentication — OTP, OAuth, JWT,
+anonymous sessions, account mode management.
 
 ### Deliverables
 
-- `AuthController` — POST /api/v1/auth/register, /login, /refresh, /logout
-- `AuthService` — bcrypt password hashing, JWT issue/verify/revoke, refresh token rotation
-- `AccountModule` — user CRUD, profile creation on register, mode selection (Normal/Business)
+- `AuthController`/`AuthService` — endpoints:
+  - `POST /api/v1/auth/otp/send` — send OTP to phone
+  - `POST /api/v1/auth/otp/verify` — verify OTP → issue JWT
+  - `POST /api/v1/auth/google` — Google OAuth callback
+  - `POST /api/v1/auth/apple` — Apple Sign-In callback
+  - `POST /api/v1/auth/refresh` — refresh token rotation
+  - `POST /api/v1/auth/logout` — revoke tokens
+  - `GET /api/v1/auth/session` — current session info
+- Anonymous guest sessions — guest token on app open, converted to full session on login
+- Gated action middleware — returns 401 `reason: "login_required"` with `pending_action` field for
+  client redirect
 - Passport JWT strategy (`jwt.strategy.ts`)
 - `@Public()` decorator working correctly
-- Better Auth session check in web middleware (using real Prisma adapter)
-- Mobile: auth token management (secure storage via expo SecureStore)
+- `AccountModule` — CRUD, mode management:
+  - `PATCH /api/v1/account/mode` — one-time activate Business mode (permanent)
+  - `PATCH /api/v1/account/industry` — set/change/remove industry tag
+  - `PATCH /api/v1/account/settings` — default_landing_screen, preferences
+- Business mode backend gate middleware — 403 `reason: "business_mode_required"` on seller/provider
+  endpoints
+- Better Auth session check in web middleware
+- Mobile: expo-secure-store token management
 
-**Requirements**: A-01, A-02, A-03, A-04, A-08, A-09
+**Requirements**: AUTH-01 through AUTH-08, ACC-01 through ACC-08
 
 ---
 
-## Phase 3 — Profile System
+## Phase 3 — Profile System & Connections
 
 **Status**: ⬜ Not started **Depends on**: Phase 2 **Goal**: Users can create and manage their
-public profile and link collection.
+bio-link profile, add video embeds, and build connections.
 
 ### Deliverables
 
-- `ProfileController` — CRUD for profile (slug, display name, bio, social links)
-- `ProfileService` — slug uniqueness validation, link ordering
-- Link management — POST/PATCH/DELETE `/api/v1/links`, reorder endpoint
-- Public profile read API — `GET /api/v1/p/:username` (public, no auth)
-- Web: `[username]` page renders public profile from API
-- Web: dashboard → profile editor UI (links, bio, socials)
-- Analytics stub — increment view count on profile page visit
-- Click tracking — increment click count when links are followed
+- `ProfileController`/`ProfileService`:
+  - Slug management — unique, URL-safe, case-insensitive
+  - Display name, bio, avatar, cover image, business details
+  - Social media preset links (Instagram, YouTube, TikTok, Twitter, Facebook)
+- Link management — CRUD, reorder, types (URL, email, phone, social, file)
+- Video embed management — YouTube, Instagram Reels, TikTok — CRUD, reorder, URL validation
+- QR code generation for profile URL
+- Profile preview endpoint (render as mobile view)
+- Public profile read API — `GET /api/v1/p/:username` (public, no auth required)
+- Web: `[username]` page renders public profile from API with SEO meta tags
+- Web: dashboard → profile editor UI (links, bio, socials, video embeds)
+- R2 pre-signed URL upload flow (client → R2 → NestJS records reference)
+- imgproxy integration for avatar/cover/product images
+- Connection system:
+  - `POST /api/v1/connections/request` — send connection request
+  - `PATCH /api/v1/connections/:id` — accept/decline
+  - `GET /api/v1/connections` — list connections
+  - Connection count on profile
+  - For Business users: accepted connections → CRM lead sync with source `connection`
+- Analytics stubs — increment view count on profile visit, click count on link follow
 
-**Requirements**: P-01 to P-08, P-10, AN-01, AN-02
+**Requirements**: PROF-01 through PROF-15, CONN-01 through CONN-05, AN-01, AN-02
 
 ---
 
 ## Phase 4 — Discovery & Search
 
-**Status**: ⬜ Not started **Depends on**: Phase 3 **Goal**: Users can find people and businesses
-nearby.
+**Status**: ⬜ Not started **Depends on**: Phase 3 **Goal**: Anonymous-first hyperlocal discovery —
+geo search, text search, bookmarks.
 
 ### Deliverables
 
-- Location update endpoint — `PATCH /api/v1/account/location` (stores PostGIS point)
-- `DiscoveryService` — PostGIS radius query (default 5km, max 50km)
-- Meilisearch indexing — profile documents indexed on create/update
+- Discovery accessible to anonymous users (no auth required)
+- Clean search-bar home screen (AI-feel, minimal, Perplexity-style)
+- Discover feed — city-level content by default, upgrades to hyperlocal on location grant
+- Near Me — location permission prompt, radius-based results
+- `PATCH /api/v1/account/location` — stores PostGIS point
+- `DiscoveryService`:
+  - PostGIS `ST_DWithin()` radius queries (default 5km, max 50km)
+  - Distance calculation from user to each result
+  - Meilisearch indexing — profile documents synced via Redis Streams on create/update
+  - Combined search: PostGIS geo filter → Meilisearch text ranking → merged result
 - `GET /api/v1/discovery/feed` — geo-paginated nearby profiles
-- `GET /api/v1/discovery/search?q=&lat=&lng=` — full-text + geo search
-- Mobile: Discovery screen with infinite scroll, search bar, map-style radius selector
-- Mobile: Tap on profile card → public profile view
+- `GET /api/v1/discovery/search?q=&lat=&lng=&category=` — full-text + geo + category filter
+- Industry tag category filter in search results
+- Bookmarks:
+  - `POST /api/v1/bookmarks` — bookmark profile/business (gated — login required)
+  - `GET /api/v1/bookmarks` — list bookmarks
+  - `DELETE /api/v1/bookmarks/:id`
+- Infinite scroll pagination
 
-**Requirements**: D-01 to D-04, D-06, M-03, M-04
+**Requirements**: DISC-01 through DISC-15
 
 ---
 
 ## Phase 5 — Mobile App Foundation
 
-**Status**: ⬜ Not started **Depends on**: Phase 3 **Goal**: Mobile app is functional end-to-end for
-core flows: auth, profile, discovery.
+**Status**: ⬜ Not started **Depends on**: Phase 3 **Goal**: Mobile app is fully functional
+end-to-end — onboarding, auth, profile, discovery, sidebar nav.
 
 ### Deliverables
 
-- Expo Router tab layout at `/(tabs)`: discovery, profile, account
-- Auth flow: splash → login/register → tab shell
-- Token storage and refresh flow in React Native (expo-secure-store)
+- **Navigation**: Sidebar drawer (hamburger menu, NOT bottom tabs) — ChatGPT/Perplexity pattern
+  - Sidebar contents: Discover, Near Me, My Bio, Dashboard (Business only), Bookmarks, Connections,
+    Settings, Login/Signup
+  - Avatar dropdown (top right) — account info, mode badge, quick links
+  - Contextual FAB (bottom right) per screen
+- Onboarding slides (first install only, `onboarding_completed` in local storage)
+- Auth flow: splash → onboarding → login/signup (skippable) → industry selection (optional) → bio
+  setup (skippable) → Discovery
+- Anonymous mode — browse discovery without login
+- Contextual login prompt on gated actions (with pending action redirect)
+- Token storage (expo-secure-store) + refresh flow
 - API client setup (TanStack Query + Zustand auth store)
-- Profile edit screen working against real API
-- Discovery feed wired to real API
-- Account/settings screen
+- Profile view/edit screen
+- Discovery feed screen with floating search input
+- Account/settings screen (default screen override, industry tag, mode management)
 - Push notification permissions prompt
+- Auto location for nearby search
 
-**Requirements**: M-01, M-02, M-03, M-04, M-05, M-10
+**Requirements**: MOB-01 through MOB-10, MOB-13, MOB-16 through MOB-18, AUTH-09 through AUTH-12
 
 ---
 
-## Phase 6 — Admin Panel
+## Phase 6 — Admin Panel, Ratings, Referrals, Notifications
 
-**Status**: ⬜ Not started **Depends on**: Phase 2 **Goal**: Internal admin panel is usable for
-basic user management.
+**Status**: ⬜ Not started **Depends on**: Phase 3 (Ratings/Referrals), Phase 2 (Admin) **Goal**:
+Admin tools, verified reviews, referral program, push notifications.
 
 ### Deliverables
 
-- Admin auth — separate admin login (JWT with ADMIN/SUPER_ADMIN role check)
-- `admin/src/lib/auth.ts` — implemented with Better Auth or direct JWT
-- User listing with search/filter
-- User detail view (profile, links, account status)
-- Basic moderation — activate/deactivate account
-- Admin dashboard with user count metrics
+- **Admin Panel**:
+  - Admin auth — JWT with ADMIN/SUPER_ADMIN role check
+  - User listing with search, filter by mode (Normal/Business)
+  - User detail view (profile, links, account status)
+  - Manual business verification → trust badge
+  - Review moderation (flag + remove)
+  - Platform analytics dashboard (users, profiles, GMV, bookings, referral conversions)
+- **Ratings & Reviews**:
+  - Review eligibility check — must have completed booking OR order
+  - Star rating + written review CRUD
+  - "Verified buyer" badge on reviews
+  - Business owner public response
+  - Trust score computation alongside star rating
+  - Notification on new review
+- **Referral System**:
+  - Unique referral link generation per account
+  - Signup tracking / attribution
+  - Double-sided reward: referrer + referred each get 1 month free Business mode
+  - Referral performance dashboard (count, conversions)
+  - WhatsApp direct share for referral link
+- **Notifications**:
+  - FCM push (mobile) for bookings, orders, reviews, connections, offers
+  - Firebase Dynamic Links for WhatsApp deep linking (app install)
+  - Deep linking — tap notification → relevant screen
+  - Dispatch via Redis Streams events
+- **Mobile additions**:
+  - QR code scanner (camera) to open business profiles
+  - Share bio link to WhatsApp with Firebase Dynamic Links
+- **Profile themes** (basic 3+ themes)
 
-**Requirements**: ADM-01, ADM-02, A -> INF-01
+**Requirements**: ADM-01 through ADM-05, RAT-01 through RAT-06, REF-01 through REF-05, NOT-01,
+NOT-04, NOT-05, MOB-11, MOB-14, PROF-13, DISC-10, DISC-11
 
 ---
 
@@ -138,52 +219,84 @@ wired, production-ready config.
 - GitHub Actions workflow for `web/` (lint + build on push)
 - GitHub Actions workflow for `admin/` (lint + build on push)
 - GitHub Actions workflow for `mobile/` (lint)
-- Pino logger module added to NestJS `AppModule`
+- Pino logger module added to NestJS AppModule (structured logs with request ID)
 - Sentry/OpenTelemetry `instrument.ts` ported to monolith entry
-- Structured log output with request ID correlation
 - API Dockerfile validated — local `docker build` succeeds
 - Swagger docs current with actual implemented endpoints
+- Grafana + Loki setup docs
 
-**Requirements**: INF-01, INF-02, INF-03, INF-04
-
----
-
-## Phase 8 — Commerce & Payments (Business Mode)
-
-**Status**: ⬜ Not started **Depends on**: Phase 2, Phase 3 **Goal**: Business users can list
-products/services and accept payments.
-
-### Deliverables
-
-- Catalogue CRUD — product and service listings
-- Order placement + management (status workflow)
-- Razorpay order creation + payment verification webhook
-- Razorpay Route split — platform 2-5% commission
-- Wallet balance tracking (credit on payment received)
-- Order push notifications to seller via FCM
-- Mobile: commerce screens (catalogue, order management)
-- Mobile: Razorpay payment UI integration
-
-**Requirements**: C-01 to C-05, PAY-01, PAY-02, PAY-03, N-01, M-06, M-08
+**Requirements**: F-08 through F-11
 
 ---
 
-## Phase 9 — Bookings & Connections
+## Phase 8 — Commerce & Payments & Booking
 
-**Status**: ⬜ Not started **Depends on**: Phase 8 **Goal**: Service businesses can accept
-appointments; users can connect with each other.
+**Status**: ⬜ Not started **Depends on**: Phase 2, Phase 3, Phase 6 (notifications) **Goal**:
+Business users can list products/services, accept orders/bookings, and receive payments.
 
 ### Deliverables
 
-- Availability time slot management for business accounts
-- Booking flow — customer creates booking, seller confirms
-- Booking cancellation and no-show handling
-- Booking reminder push notifications
-- Connection request flow — send/accept/decline
-- Connection list view
-- Mobile: booking and connections screens
+- **Commerce (Products)**:
+  - Product catalogue CRUD — name, photos (R2 upload from camera/gallery), description, price,
+    stock, category
+  - Cart + checkout flow — in-profile purchase UX
+  - Order placement + confirmation notification
+  - Order state machine (pending → confirmed → shipped → delivered → cancelled)
+  - Seller order management dashboard
+- **Booking (Services)**:
+  - Service catalogue CRUD — name, description, duration, price
+  - Availability slot + working hours management
+  - Customer booking flow — slot selection → confirmation
+  - Double-booking prevention
+  - Booking confirm/reschedule/cancel from dashboard
+  - Pre-booking reminder notification
+  - Customer cancel/reschedule within window
+- **Payments**:
+  - Razorpay order creation
+  - Payment verification via webhook
+  - Razorpay Route — platform 2-5% commission auto-split to seller
+  - Payout trigger on order/booking completion
+  - Refund flow from dashboard
+  - All credentials in AWS Secrets Manager
+- **Unified orders feed**: `GET /api/v1/orders` merges product orders + service bookings for
+  frontend
+- **Mobile**: commerce screens, booking screens, Razorpay payment UI, camera photo upload
+- Business mode gate on all seller/provider endpoints
 
-**Requirements**: B-01 to B-04, CN-01 to CN-03, M-07, N-02
+**Requirements**: COM-01 through COM-10, BOOK-01 through BOOK-10, PAY-01 through PAY-06, MOB-15
+
+---
+
+## Phase 9 — CRM, Monetization & Polish
+
+**Status**: ⬜ Not started **Depends on**: Phase 8 **Goal**: Complete CRM tools, monetization
+features, and platform polish.
+
+### Deliverables
+
+- **CRM**:
+  - Customer list with order + booking history
+  - Lead tracking — profile visitors, savers, connections as lead sources
+  - Targeted messages/offers to customer list
+  - Unified dashboard — bookings, orders, comms in one view
+  - Customer data export (CSV)
+- **Business Analytics**:
+  - Shop performance — total sales, revenue, top products
+  - Discovery metrics — impressions, profile visits, conversion rate
+  - Booking analytics — total bookings, cancellation rate, peak times
+  - Earnings dashboard — affiliate commissions, product sales, payouts
+- **Monetization**:
+  - Digital product sales (e-books, templates, presets)
+  - Affiliate marketing — promote other users' products, earn commissions
+  - Profile visibility boost in nearby search results
+- **Polish**:
+  - Web push notifications (desktop)
+  - Notification preferences per type
+  - Offline access on mobile (profile, saved, past orders)
+  - Admin feature flags management
+
+**Requirements**: CRM-01 through CRM-05, AN-03 through AN-05, MON-01 through MON-03, COM-11, NOT-02,
+NOT-03, MOB-12, ADM-06
 
 ---
 
