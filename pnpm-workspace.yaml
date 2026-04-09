@@ -2,7 +2,7 @@ packages:
   - "web"
   - "admin"
   - "mobile"
-  - "api/*"
+  - "api"
   - "shared/*"
 allowBuilds:
   '@nestjs/core': true

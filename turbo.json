@@ -21,16 +21,10 @@
       "cache": false,
       "persistent": true
     },
+    "start:staging": { "cache": false },
+    "start:production": { "cache": false },
     "lint": {
       "dependsOn": ["^lint"]
-    },
-    "test": {
-      "dependsOn": [],
-      "outputs": ["coverage/**"]
-    },
-    "test:coverage": {
-      "dependsOn": [],
-      "outputs": ["coverage/**"]
     },
     "lint:fix": {
       "cache": false
@@ -40,6 +34,14 @@
     },
     "format:check": {
       "outputs": []
+    },
+    "test": {
+      "dependsOn": [],
+      "outputs": ["coverage/**"]
+    },
+    "test:coverage": {
+      "dependsOn": [],
+      "outputs": ["coverage/**"]
     },
     "clean": {
       "cache": false

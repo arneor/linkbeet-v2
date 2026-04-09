@@ -1,5 +1,6 @@
-import { HomeScreen } from '@/src/features/biolink/screens/HomeScreen'
+import { Redirect } from 'expo-router'
 
 export default function IndexPage() {
-  return <HomeScreen />
+  // Automatically route to the primary layout (discovery/dashboard logic will be handled inside tabs)
+  return <Redirect href="/(tabs)" />
 }
