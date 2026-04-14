@@ -7,11 +7,11 @@ _Project memory — updated at each phase transition | PRD: v2.3_
 ## Current Position
 
 - **Milestone**: 1 (Phase 2 Core Build)
-- **Current Phase**: 1 — Completed (Design System & Shared UI)
+- **Current Phase**: 2 — Completed (Test Drive)
 - **PRD Version**: v2.3 (April 2026)
 - **Target Launch**: July 2026 (Soft Launch)
 - **Build Approach**: **UI-first** — all screens (web + mobile together) before backend
-- **Next Action**: `/gsd-discuss-phase 2` → `/gsd-plan-phase 2` → `/gsd-execute-phase 2`
+- **Next Action**: `/gsd-discuss-phase 3` → `/gsd-plan-phase 3` → `/gsd-execute-phase 3`
 
 ---
 
@@ -196,8 +196,8 @@ APP_PORT (3000), APP_ENV, FRONTEND_URL
 | Legacy cleanup                                 | ✅     | April 2026 | Microservices → monolith migration              |
 | GSD initialized                                | ✅     | April 2026 | Codebase mapped, planning aligned with PRD v2.3 |
 | 1 — Design System & Shared UI                  | ✅     | April 2026 | Design tokens, shared UI components, nav shells |
-| 2 — Auth & Onboarding Screens                  | ⬜     | —          |                                                 |
-| 3 — Discovery & Search Screens                 | ⬜     | —          |                                                 |
+| 2 — Web Discovery Test Drive (Override)        | ✅     | April 2026 | Web UI validation of tokens + AppShell          |
+| 3 — Discovery & Search Screens                 | ⬜     | —          | Full cross-platform implementation              |
 | 4 — Bio Profile Screens                        | ⬜     | —          |                                                 |
 | 5 — Account & Settings Screens                 | ⬜     | —          |                                                 |
 | 6 — Commerce & Booking Screens                 | ⬜     | —          |                                                 |
