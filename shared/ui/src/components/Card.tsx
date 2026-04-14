@@ -3,20 +3,21 @@ import { cn } from '../lib/utils'
 
 // ─── Card ─────────────────────────────────────────────────────
 export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
-  variant?: 'default' | 'bordered' | 'ghost'
+  variant?: 'light' | 'dark' | 'elevated' | 'ghost'
 }
 
 export const Card = React.forwardRef<HTMLDivElement, CardProps>(
-  ({ className, variant = 'default', ...props }, ref) => {
+  ({ className, variant = 'light', ...props }, ref) => {
     return (
       <div
         ref={ref}
         className={cn(
-          'rounded-2xl p-6',
+          'rounded-[8px] p-6',
           {
-            'bg-white shadow-sm': variant === 'default',
-            'border border-slate-200 bg-white': variant === 'bordered',
-            'bg-slate-50': variant === 'ghost',
+            'bg-[#f5f5f7]': variant === 'light',
+            'bg-[#272729] text-white': variant === 'dark',
+            'bg-white shadow-[3px_5px_30px_rgba(0,0,0,0.22)]': variant === 'elevated',
+            'bg-transparent': variant === 'ghost',
           },
           className,
         )}
@@ -38,16 +39,21 @@ CardHeader.displayName = 'CardHeader'
 export interface CardTitleProps extends React.HTMLAttributes<HTMLHeadingElement> {}
 export const CardTitle = React.forwardRef<HTMLHeadingElement, CardTitleProps>(
   ({ className, ...props }, ref) => (
-    <h3 ref={ref} className={cn('font-semibold text-lg leading-none tracking-tight', className)} {...props} />
+    <h3
+      ref={ref}
+      className={cn(
+        'font-bold text-[21px] leading-[1.19] tracking-[0.231px]',
+        className,
+      )}
+      {...props}
+    />
   ),
 )
 CardTitle.displayName = 'CardTitle'
 
 export interface CardContentProps extends React.HTMLAttributes<HTMLDivElement> {}
 export const CardContent = React.forwardRef<HTMLDivElement, CardContentProps>(
-  ({ className, ...props }, ref) => (
-    <div ref={ref} className={cn('', className)} {...props} />
-  ),
+  ({ className, ...props }, ref) => <div ref={ref} className={cn('', className)} {...props} />,
 )
 CardContent.displayName = 'CardContent'
 
