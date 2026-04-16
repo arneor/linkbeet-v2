@@ -19,4 +19,9 @@
     <style name="NormalTheme" parent="@android:style/Theme.Light.NoTitleBar">
         <item name="android:windowBackground">?android:colorBackground</item>
     </style>
+    <!-- Applied to the <application> tag so the window is instantly white
+         before any activity theme is applied, eliminating the pre-splash black flash. -->
+    <style name="AppTheme" parent="@android:style/Theme.Light.NoTitleBar">
+        <item name="android:windowBackground">@color/splash_bg</item>
+    </style>
 </resources>

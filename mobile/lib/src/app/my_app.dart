@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:linkbeet/src/core/router/app_router.dart';
 import 'package:linkbeet/src/core/theme/app_theme.dart';
@@ -23,16 +24,19 @@ class AppView extends StatelessWidget {
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (_, child) {
-        return MaterialApp.router(
-          title: F.title,
-          debugShowCheckedModeBanner: false,
+        return AnnotatedRegion<SystemUiOverlayStyle>(
+          value: AppTheme.systemUiOverlayStyle,
+          child: MaterialApp.router(
+            title: F.title,
+            debugShowCheckedModeBanner: false,
 
-          // Router
-          routerConfig: appRouter,
+            // Router
+            routerConfig: appRouter,
 
-          // Theme — light mode only (DESIGN.md §9: "No dark mode")
-          theme: AppTheme.lightTheme,
-          themeMode: ThemeMode.light,
+            // Theme — light mode only (DESIGN.md §9: "No dark mode")
+            theme: AppTheme.lightTheme,
+            themeMode: ThemeMode.light,
+          ),
         );
       },
     );

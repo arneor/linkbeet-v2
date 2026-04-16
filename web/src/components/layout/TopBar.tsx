@@ -27,19 +27,10 @@ export function TopBar({ onMenuToggle }: TopBarProps) {
         className="flex items-center justify-center w-[44px] h-[44px] -ml-2 rounded-[8px] hover:bg-slate-200/50 text-slate-500 hover:text-slate-700 transition-colors duration-150"
         aria-label="Open menu"
       >
-        <svg
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <line x1="4" x2="20" y1="12" y2="12" />
-          <line x1="4" x2="20" y1="6" y2="6" />
-          <line x1="4" x2="20" y1="18" y2="18" />
+        <svg width="22" height="16" viewBox="0 0 22 16" fill="currentColor">
+          <rect width="22" height="2" rx="1" />
+          <rect y="7" width="16" height="2" rx="1" />
+          <rect y="14" width="10" height="2" rx="1" />
         </svg>
       </button>
 

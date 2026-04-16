@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:linkbeet/firebase/firebase_options.dart';
 import 'package:linkbeet/src/app/my_app.dart';
+import 'package:linkbeet/src/core/theme/app_theme.dart';
 
 // flutter run --flavor dev -t lib/main_dev.dart
 // flutter run --flavor prod -t lib/main_prod.dart
@@ -18,6 +19,10 @@ Future<void> main() async {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
+
+  // Enforce status bar style at startup — dark icons on white background.
+  // This guarantees iOS picks it up before any widget tree renders.
+  SystemChrome.setSystemUIOverlayStyle(AppTheme.systemUiOverlayStyle);
 
   runApp(const MyApp());
 }

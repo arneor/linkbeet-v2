@@ -70,22 +70,22 @@ flutter_launcher_icons:
   remove_alpha_ios: true
   image_path: "assets/luncher/ios/AppIcon~ios-marketing.png"
   min_sdk_android: 21
-  adaptive_icon_background: "#512df1"
-  adaptive_icon_foreground: "assets/luncher/ios/AppIcon~ios-marketing.png"
+  adaptive_icon_background: "#FFFFFF"
+  adaptive_icon_foreground: "assets/images/black-logo.png"
 
 flutter_native_splash:
-  color: "#512df1"
-  image: "assets/images/logo-splash-padded.png"
+  color: "#FFFFFF"
+  image: "assets/images/true-black-logo.png"
+  android_gravity: center
+  ios_content_mode: center
   android: true
   ios: true
   fullscreen: true
 
   android_12:
-    image: "assets/images/logo-splash-padded.png"
-    color: "#512df1"
-    android: true
-    ios: true
-    icon_background_color: "#512df1"
+    image: "assets/images/true-black-logo.png"
+    color: "#FFFFFF"
+    icon_background_color: "#FFFFFF"
 
   web: false
 
@@ -108,8 +108,8 @@ flavorizr:
       ios:
         bundleId: 'com.example.linkbeet.dev'
       icon: 'assets/luncher/ios/AppIcon~ios-marketing.png'
-      adaptive_icon_background: "#512df1"
-      adaptive_icon_foreground: "assets/luncher/ios/AppIcon~ios-marketing.png"
+      adaptive_icon_background: "#FFFFFF"
+      adaptive_icon_foreground: "assets/images/black-logo.png"
 
     stage:
       app:
@@ -119,8 +119,8 @@ flavorizr:
       ios:
         bundleId: 'com.example.linkbeet.stage'
       icon: 'assets/luncher/ios/AppIcon~ios-marketing.png'
-      adaptive_icon_background: "#512df1"
-      adaptive_icon_foreground: "assets/luncher/ios/AppIcon~ios-marketing.png"
+      adaptive_icon_background: "#FFFFFF"
+      adaptive_icon_foreground: "assets/images/black-logo.png"
 
     prod:
       app:
@@ -130,5 +130,5 @@ flavorizr:
       ios:
         bundleId: 'com.example.linkbeet.app'
       icon: 'assets/luncher/ios/AppIcon~ios-marketing.png'
-      adaptive_icon_background: "#512df1"
-      adaptive_icon_foreground: "assets/luncher/ios/AppIcon~ios-marketing.png"
+      adaptive_icon_background: "#FFFFFF"
+      adaptive_icon_foreground: "assets/images/black-logo.png"

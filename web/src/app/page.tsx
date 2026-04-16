@@ -46,9 +46,9 @@ export default function DiscoveryPage() {
           {/* Search pill */}
           <div
             className={[
-              'relative flex items-center w-full h-[52px] md:h-[52px] bg-white border transition-all duration-200',
+              'relative flex items-center w-full h-[60px] md:h-[60px] bg-white border transition-all duration-200',
               showDropdown
-                ? 'rounded-[26px] md:rounded-t-[26px] md:rounded-b-none border-slate-200 md:border-b-transparent shadow-[0_2px_12px_rgba(0,0,0,0.06)] md:shadow-[0_-2px_12px_rgba(0,0,0,0.06)]'
+                ? 'rounded-[30px] md:rounded-t-[30px] md:rounded-b-none border-slate-200 md:border-b-transparent shadow-[0_2px_12px_rgba(0,0,0,0.06)] md:shadow-[0_-2px_12px_rgba(0,0,0,0.06)]'
                 : 'rounded-full border-slate-200 shadow-[0_2px_12px_rgba(0,0,0,0.06)] hover:shadow-[0_4px_20px_rgba(0,0,0,0.09)]',
             ].join(' ')}
           >
@@ -103,8 +103,8 @@ export default function DiscoveryPage() {
               'max-md:border-none max-md:shadow-none max-md:rounded-none max-md:overflow-visible',
               'block',
               // Desktop classes: absolutely positioned, border/shadow, visibility tied to showDropdown
-              'md:absolute md:left-0 md:right-0 md:top-[52px]',
-              'md:border md:border-t-0 md:border-slate-200 md:rounded-b-[26px] md:shadow-[0_8px_24px_rgba(0,0,0,0.08)] md:overflow-hidden',
+              'md:absolute md:left-0 md:right-0 md:top-[60px]',
+              'md:border md:border-t-0 md:border-slate-200 md:rounded-b-[30px] md:shadow-[0_8px_24px_rgba(0,0,0,0.08)] md:overflow-hidden',
               showDropdown ? 'md:block animate-[fadeIn_0.15s_ease-out]' : 'md:hidden',
             ].join(' ')}
           >

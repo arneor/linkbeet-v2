@@ -9,7 +9,7 @@ class AppSizes {
   static const double drawerWidth = 260.0;
 
   /// TopBar / AppBar height — 48px
-  static const double topBarHeight = 48.0;
+  static const double topBarHeight = 52.0;
 
   /// Sidebar nav item height — 48px
   static const double navItemHeight = 48.0;

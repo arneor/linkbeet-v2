@@ -79,7 +79,7 @@ and mobile.
 
 ### Phase 3 — Discovery & Search Screens
 
-**Status**: ⬜ Not started **Depends on**: Phase 1 **Goal**: Discovery home, search, Near Me — the
+**Status**: 🔵 In progress **Depends on**: Phase 1 **Goal**: Discovery home, search, Near Me — the
 primary browsing experience.
 
 #### Deliverables (per screen — web + mobile)
@@ -93,6 +93,14 @@ primary browsing experience.
 - **Anonymous experience** — no login required to browse (everything accessible)
 
 **Requirements**: DISC-01 through DISC-14, MOB-07, MOB-08
+
+**Plans**: 4 plans
+
+Plans:
+- [x] 03-01-PLAN.md — Flutter project scaffold + Clean Architecture structure
+- [x] 03-02-PLAN.md — Core design system, theme, shared widgets, navigation shell, DI, router
+- [ ] 03-03-PLAN.md — Discovery Home screen (HomeScreen + DiscoverySearchInput, FilterChipRow, SuggestionPillRow widgets)
+- [ ] 03-04-PLAN.md — Search Results + Near Me screens + route wiring
 
 ---
 

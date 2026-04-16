@@ -49,13 +49,18 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF512DF1),
+      backgroundColor: Colors.white,
       body: Center(
         child: FadeTransition(
           opacity: _fadeAnimation,
           child: Hero(
-            tag: 'logo',
-            child: Image.asset(AppAssets.splashLogo, width: 288, height: 288),
+            tag: 'linkbeet-splash-logo',
+            child: Image.asset(
+              AppAssets.trueBlackLogo,
+              width: 180,
+              height: 180,
+              color: Colors.black,
+            ),
           ),
         ),
       ),

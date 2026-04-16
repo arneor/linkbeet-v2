@@ -57,7 +57,7 @@ class AppTheme {
   static const SystemUiOverlayStyle systemUiOverlayStyle = SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
     statusBarIconBrightness: Brightness.dark, // Dark icons on white bg
-    statusBarBrightness: Brightness.light, // iOS
+    statusBarBrightness: Brightness.light, // iOS: Light bg = dark/black text visible
     systemNavigationBarColor: AppColors.pageBg,
     systemNavigationBarIconBrightness: Brightness.dark,
   );
@@ -524,7 +524,6 @@ DrawerThemeData _drawerTheme(ColorScheme colorScheme) {
     backgroundColor: AppColors.sidebarBg,
     elevation: 0,
     shadowColor: AppColors.shadowCard,
-    width: AppSizes.drawerWidth,
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
   );
 }
