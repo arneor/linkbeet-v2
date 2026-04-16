@@ -1,58 +1,134 @@
-name: linkbeet_mobile
-description: LinkBeet — Hyperlocal Community Commerce Platform
+name: linkbeet
+description: "A new Flutter project."
 publish_to: 'none'
-version: 1.0.0+1
+version: 0.1.0
 
 environment:
-  sdk: ^3.7.0
+  sdk: ^3.10.7
 
 dependencies:
+  dartz: ^0.10.1
+  equatable: ^2.0.7
   flutter:
+    sdk: flutter
+  flutter_localizations:
     sdk: flutter
 
   # State Management
-  flutter_bloc: ^9.1.0
-  equatable: ^2.0.7
-
-  # Routing
-  go_router: ^15.1.0
-
-  # Dependency Injection
-  get_it: ^8.0.3
-  injectable: ^2.5.0
-
-  # Networking
-  dio: ^5.8.0
-
-  # Data Models & Serialization
-  freezed_annotation: ^3.0.0
-  json_annotation: ^4.9.0
-
-  # Functional Programming
-  dartz: ^0.10.1
+  flutter_bloc: ^9.1.1
 
   # UI
-  google_fonts: ^6.2.1
+  flutter_screenutil: ^5.9.3
   flutter_svg: ^2.0.17
-  cached_network_image: ^3.4.1
 
-  # Utils
+  # Media
+  image_picker: ^1.1.2
+
+  # Storage
+  flutter_secure_storage: ^10.0.0
+
+  # Dependency Injection
+  get_it: ^9.2.0
+  injectable: ^2.7.1+4
+
+  # Navigation
+  go_router: ^17.0.1
+
+  # Internationalization
   intl: ^0.20.2
-  shared_preferences: ^2.5.3
-  flutter_secure_storage: ^9.2.4
-  logger: ^2.5.0
-  url_launcher: ^6.3.1
 
-  # Platform
-  cupertino_icons: ^1.0.8
+  # Logging
+  logger: ^2.6.2
+
+  # Storage
+  shared_preferences: ^2.5.4
+  pinput: ^6.0.1
+  font_awesome_flutter: ^11.0.0
+  modal_bottom_sheet: ^3.0.0
+
+  # Location
+  geolocator: ^14.0.2
+  geocoding: ^4.0.0
+
+  # Firebase
+  firebase_core: ^4.3.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^5.0.0
+  flutter_lints: ^6.0.0
+  flutter_flavorizr: ^2.4.1
   build_runner: ^2.4.14
-  freezed: ^3.0.0
-  json_serializable: ^6.9.4
-  injectable_generator: ^2.7.0
-  bloc_test: ^10.0.0
-  mocktail: ^1.0.4
+  go_router_builder: ^4.0.0
+  flutter_native_splash: ^2.4.4
+  flutter_launcher_icons: ^0.14.4
+  image: ^4.7.2
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  remove_alpha_ios: true
+  image_path: "assets/luncher/ios/AppIcon~ios-marketing.png"
+  min_sdk_android: 21
+  adaptive_icon_background: "#512df1"
+  adaptive_icon_foreground: "assets/luncher/ios/AppIcon~ios-marketing.png"
+
+flutter_native_splash:
+  color: "#512df1"
+  image: "assets/images/logo-splash-padded.png"
+  android: true
+  ios: true
+  fullscreen: true
+
+  android_12:
+    image: "assets/images/logo-splash-padded.png"
+    color: "#512df1"
+    android: true
+    ios: true
+    icon_background_color: "#512df1"
+
+  web: false
+
+flutter:
+  generate: true
+  uses-material-design: true
+  assets:
+    - assets/images/
+    - assets/icons/
+    - assets/luncher/
+
+flavorizr:
+  ide: 'vscode'
+  flavors:
+    dev:
+      app:
+        name: 'LinkBeet Dev'
+      android:
+        applicationId: 'com.example.linkbeet.dev'
+      ios:
+        bundleId: 'com.example.linkbeet.dev'
+      icon: 'assets/luncher/ios/AppIcon~ios-marketing.png'
+      adaptive_icon_background: "#512df1"
+      adaptive_icon_foreground: "assets/luncher/ios/AppIcon~ios-marketing.png"
+
+    stage:
+      app:
+        name: 'LinkBeet Stage'
+      android:
+        applicationId: 'com.example.linkbeet.stage'
+      ios:
+        bundleId: 'com.example.linkbeet.stage'
+      icon: 'assets/luncher/ios/AppIcon~ios-marketing.png'
+      adaptive_icon_background: "#512df1"
+      adaptive_icon_foreground: "assets/luncher/ios/AppIcon~ios-marketing.png"
+
+    prod:
+      app:
+        name: 'LinkBeet'
+      android:
+        applicationId: 'com.example.linkbeet.app'
+      ios:
+        bundleId: 'com.example.linkbeet.app'
+      icon: 'assets/luncher/ios/AppIcon~ios-marketing.png'
+      adaptive_icon_background: "#512df1"
+      adaptive_icon_foreground: "assets/luncher/ios/AppIcon~ios-marketing.png"

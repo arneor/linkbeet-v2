@@ -1,7 +1,7 @@
 # LinkBeet v2 — Phase 2 Product Requirements Document
 
-**Version**: 2.3 **Date**: April 2026 **Status**: Ready for Development **Target Launch**: July 2026
-(Soft Launch) **Previous Version**: 2.2 (April 2026)
+**Version**: 3.0 **Date**: April 2026 **Status**: Ready for Development **Target Launch**: July 2026
+(Soft Launch) **Previous Version**: 2.3 (April 2026)
 
 ---
 
@@ -42,8 +42,9 @@ business, creator, or service provider to:
 8. Monetize through affiliate tools, platform-native commerce, and creator-specific revenue streams
 
 The platform runs on a modular NestJS monolith backend, Next.js web surfaces (client + admin), and a
-React Native mobile app (iOS + Android), all backed by PostgreSQL + PostGIS, Redis, Meilisearch,
-Firebase Cloud Messaging, and Razorpay.
+**Flutter mobile app** (iOS + Android — migrated from Expo React Native in Phase 3), all hosted on
+AWS ECS (Mumbai), backed by PostgreSQL + PostGIS, Redis, Meilisearch, Firebase Cloud Messaging, and
+Razorpay Route.
 
 ---
 
@@ -516,17 +517,34 @@ Gaming, Travel & Activities, Community, Business / Other
 
 ### Architecture
 
-- NestJS modular monolith with modules: AuthModule, DiscoveryModule, CommerceModule, BookingModule,
-  CRMModule, NotificationsModule, AnalyticsModule, RatingsModule, AdminModule, AccountModule
-- Single deployable backend on AWS ECS (Docker), ap-south-1 Mumbai region
+- NestJS modular monolith — single deployable backend on AWS ECS (Docker), ap-south-1 Mumbai
+- 14 modules: `AuthModule`, `AccountModule`, `ProfileModule`, `ConnectionsModule`,
+  `DiscoveryModule`, `CommerceModule`, `BookingModule`, `PaymentsModule`, `CRMModule`,
+  `NotificationsModule`, `RatingsModule`, `AnalyticsModule`, `ReferralModule`, `AdminModule`
 - Module boundaries enforced at code level — each module owns its own service, controller, and
   repository layer
 - No inter-service HTTP calls — all cross-module communication via direct service injection or Redis
   Streams events
+- `CommerceModule` and `BookingModule` remain separate at the backend (different state machines). A
+  unified `GET /orders` aggregation endpoint merges both for the frontend
+
+### Scaling Philosophy
+
+We do not change architecture as we grow. The same stack runs from Day 1 to 10L users.
+
+We only scale: instance size, number of running containers, and caching layers (Redis added at
+threshold, not on day 1).
+
+| Stage   | Users   | Monthly Cost   |
+| ------- | ------- | -------------- |
+| Stage 1 | 0–1,000 | ₹5,000–10,000  |
+| Stage 2 | 1k–10k  | ₹10,000–20,000 |
+| Stage 3 | 10k–50k | ₹20,000–40,000 |
+| Stage 4 | 50k–1L  | ₹40,000–80,000 |
 
 ### Authentication & Anonymous Access
 
-- Better Auth (self-hosted) integrated into NestJS AuthModule
+- Better Auth (self-hosted) integrated into NestJS `AuthModule`
 - Providers: Google OAuth, Apple Sign In, Phone OTP
 - One email or phone number = one account, one identity — no multi-account system
 - Anonymous sessions: guest token issued on app open, converted to full session on login
@@ -534,7 +552,8 @@ Gaming, Travel & Activities, Community, Business / Other
   with `reason: "login_required"` — client shows contextual prompt and stores pending action for
   post-login redirect
 - User identity stored entirely in PostgreSQL — no third-party identity store
-- JWT access tokens (short-lived) + refresh tokens (long-lived, stored in Redis)
+- JWT access tokens (short-lived) + refresh tokens (long-lived, stored in Redis when Redis is
+  active)
 
 ### Account Mode System
 
@@ -543,8 +562,8 @@ Gaming, Travel & Activities, Community, Business / Other
 - Business mode activation: one-time permanent — `mode` field set to `business`, never reverted
 - Activation triggers: (1) contextual — user attempts business action → full-screen upgrade moment →
   confirm → `mode = business` (2) Settings → "Switch to Business Mode"
-- Business mode gates (backend middleware): CommerceModule seller endpoints, BookingModule provider
-  endpoints, CRMModule, offer publishing, payouts — return 403 with
+- Business mode gates (backend middleware): `CommerceModule` seller endpoints, `BookingModule`
+  provider endpoints, `CRMModule`, offer publishing, payouts — return 403 with
   `reason: "business_mode_required"` if `mode = normal`
 - Normal mode users can still browse, search, book (as customer), and buy (as customer) — no
   restrictions on consuming
@@ -552,16 +571,10 @@ Gaming, Travel & Activities, Community, Business / Other
 ### Connections System
 
 - Mutual connection model — both users must accept
-- `connection` table: requester_id, recipient_id, status (pending | accepted | declined)
+- `connection` table: `requester_id`, `recipient_id`, `status` (pending | accepted | declined)
 - Connection list visible on bio profile (count + list)
 - For Business mode accounts: accepted connections appear in CRM as lead source `connection`
 - No messaging in Phase 2 — connection is purely a social graph relationship
-- Each `account` is a fully independent entity — own profile, bio, catalogue, bookings, orders,
-  followers, billing
-- Active account stored in JWT claims — all API requests scoped to active account
-- Account switching: client calls `/auth/switch-account` with target account ID → new JWT issued
-- Billing attached to `account` record, not `auth_user`
-- AccountModule manages creation, switching, and deletion of accounts
 
 ### Industry Tag
 
@@ -584,24 +597,24 @@ Gaming, Travel & Activities, Community, Business / Other
 - `catalogue_item` has a `type` field: `product` or `service`
 - Available to ALL users — no industry or mode restriction on creating items
 - Product items: name, photos, description, price, stock_quantity, category → fulfilment via
-  CommerceModule (cart, checkout, order tracking) — receiving orders requires Business mode
-- Service items: name, description, duration_minutes, price, category → fulfilment via BookingModule
-  (slot selection, booking lifecycle) — receiving bookings requires Business mode
+  `CommerceModule` (cart, checkout, order tracking) — receiving orders requires Business mode
+- Service items: name, description, duration_minutes, price, category → fulfilment via
+  `BookingModule` (slot selection, booking lifecycle) — receiving bookings requires Business mode
 - Any user can browse, buy products, and book services regardless of mode
 - Product + Service combo type: Phase 3
 
 ### Discovery & Search
 
-- Home screen: single search bar, AI-feel minimal UI
+- Home screen: single search bar, minimal AI-feel UI
 - Discover tab: feed of city-level content by default, upgrades to hyperlocal on location grant
 - Near Me tab: location-gated, prompts for permission, shows radius-based results
 - Text search: Meilisearch — typo-tolerant, fast, synced from PostgreSQL via Redis Streams
 - Geo search: PostGIS `ST_DWithin()` for radius queries
 - Combined search: PostGIS geo filter → Meilisearch text ranking → merged result
 
-### Navigation (Mobile & Web)
+### Navigation
 
-- No bottom tab bar — modern contextual navigation pattern (ChatGPT/Perplexity-style)
+- No bottom tab bar — modern contextual navigation (ChatGPT/Perplexity-style)
 - Mobile: hamburger sidebar drawer (top left) + avatar dropdown (top right) + contextual FAB (bottom
   right)
 - Web: persistent collapsible left sidebar (desktop), minimal top bar (mobile web)
@@ -611,81 +624,149 @@ Gaming, Travel & Activities, Community, Business / Other
 - User can override default in Settings → `default_landing_screen` field on `account`
 - Sidebar Dashboard item hidden for Normal mode users — shown only after Business mode activated
 
+---
+
+## Technical Stack
+
+### Guiding Principles
+
+- **Monolith first** — modular monolith until data forces a split. Microservices kill small teams.
+- **Mumbai only** — all backend infra in ap-south-1. Latency is a product quality issue.
+- **No Vercel** — both web and admin self-hosted on ECS. Vercel bills explode at Indian scale.
+- **3G-first** — every media and API decision is optimised for Indian mobile networks.
+- **DPDP compliant** — all user identity stays in our own PostgreSQL. No Firebase Auth.
+- **Observable from day 1** — Grafana + Loki set up before the first feature ships.
+- **Design for scale, pay for usage** — same architecture from Day 1, scale resources gradually.
+
+### Monorepo
+
+```
+/
+├── apps/
+│   ├── web/           → Next.js 15 — customer-facing web app (ECS)
+│   ├── admin/         → Next.js 15 — internal admin panel (ECS)
+│   ├── mobile/        → React Native (Expo) — iOS + Android
+│   └── api/           → NestJS modular monolith (ECS)
+├── packages/
+│   ├── ui/            → Shared design tokens, Tailwind config, RN StyleSheet
+│   ├── shared/        → Shared types, DTOs, constants
+│   └── mock-services/ → Mock service layer — all UI calls go through here first
+├── terraform/         → All AWS infrastructure as code
+└── .github/
+    └── workflows/     → CI/CD for all 4 surfaces
+```
+
+### Frontend — Web
+
+| Component        | Technology                                |
+| ---------------- | ----------------------------------------- |
+| Framework        | Next.js 15 (App Router)                   |
+| Hosting          | AWS ECS (Docker) — ap-south-1. No Vercel. |
+| CDN              | AWS CloudFront in front of ECS            |
+| Styling          | Tailwind CSS                              |
+| State management | React Query (TanStack)                    |
+| Forms            | React Hook Form + Zod                     |
+| Admin panel      | Next.js 15 on same ECS cluster            |
+
+### Frontend — Mobile
+
+| Component          | Technology                     |
+| ------------------ | ------------------------------ |
+| Framework          | React Native (Expo SDK 51+)    |
+| Navigation         | Expo Router                    |
+| Push notifications | Firebase Cloud Messaging (FCM) |
+| Deep links         | Firebase Dynamic Links         |
+| Camera / Location  | Expo Camera, Expo Location     |
+| Offline resilience | React Query + AsyncStorage     |
+
+### Backend
+
+| Component | Technology                             |
+| --------- | -------------------------------------- |
+| Framework | NestJS (modular monolith)              |
+| Runtime   | Node.js 20 LTS, TypeScript strict mode |
+| Hosting   | AWS ECS (Docker) — ap-south-1          |
+| API style | REST (OpenAPI documented)              |
+
 ### Database
 
-- PostgreSQL 16 + PostGIS 3.4 on AWS RDS ap-south-1
-- Bio profile flexible data stored as JSONB columns
-- Redis Cluster for caching, sessions, rate limiting, Redis Streams as event bus
-- Meilisearch (self-hosted on EC2) for text search
-- Phase 2 is a fresh build — no migration from Phase 1 during development
-- Three environments: local (Docker), staging (RDS db.t3.micro), production (RDS db.t3.medium
-  Multi-AZ)
+| Component    | Technology                                                    |
+| ------------ | ------------------------------------------------------------- |
+| Database     | PostgreSQL 16 + PostGIS                                       |
+| Hosting      | AWS RDS — start db.t3.micro, scale to db.t3.medium at Stage 3 |
+| Geo queries  | PostGIS `ST_DWithin`                                          |
+| Bio profiles | JSONB columns                                                 |
+| Migrations   | Version-controlled, run in CI                                 |
 
-### Key Schema (v2.3)
+### Cache + Event Bus
 
-- `account` — one per email/phone, has `mode` (normal|business), `industry` (optional tag),
-  `default_landing_screen`
-- `catalogue_item` — type: product | service, linked to account, available to all accounts
-- `booking` — linked to service catalogue_item, has slot, status lifecycle
-- `order` — linked to product catalogue_item, has cart, payment, fulfilment status
-- `connection` — requester_id, recipient_id, status (pending|accepted|declined)
-- `review` — linked to completed booking or order (verified transaction only)
-- `referral` — referrer_account_id, referred_account_id, status (pending|converted),
-  reward_dispatched boolean
-- `video_embed` — account_id, platform (youtube|instagram|tiktok), url, display_order
+| Component    | Technology                                                         |
+| ------------ | ------------------------------------------------------------------ |
+| Cache        | Redis 7 on AWS ElastiCache — add at Stage 2 (1k+ users), not day 1 |
+| Event bus    | Redis Streams                                                      |
+| Upgrade path | Kafka MSK at 10L+ users                                            |
 
-### Payments
+### Search
 
-- Razorpay Route: LinkBeet is merchant of record — collects full payment, auto-splits to account
-  minus platform commission (2–5%)
-- Razorpay Subscriptions: per-account SaaS billing (tier pricing TBD — Phase 3)
-- All payment credentials in AWS Secrets Manager
+| Component     | Technology                                                |
+| ------------- | --------------------------------------------------------- |
+| Engine        | Meilisearch self-hosted on EC2                            |
+| Day 1         | EC2 t3.micro                                              |
+| Scale trigger | Dedicated cluster when index > 5GB or p95 latency > 200ms |
 
-### Notifications
+### Storage + Media
 
-- Firebase Cloud Messaging (FCM) — mobile (iOS + Android) + web push
-- Firebase Dynamic Links — WhatsApp deep linking, fallback to web
-- Notification dispatch via Redis Streams events
-- Per-account notification preferences
+| Component        | Technology                                              |
+| ---------------- | ------------------------------------------------------- |
+| Object storage   | Cloudflare R2 (zero egress fees)                        |
+| Image processing | imgproxy on EC2 (WebP, device-responsive, 3G-optimised) |
+| Upload flow      | Client → R2 pre-signed URL → NestJS records reference   |
+| CDN              | CloudFront caches imgproxy output                       |
+| Video embeds     | External only — YouTube, Instagram, TikTok              |
 
-### Storage & Media
+### Auth + Payments + Infra
 
-- Cloudflare R2 — migrated from AWS S3
-- imgproxy on EC2 — WebP, device-responsive resize, 3G-optimised
-- Upload: client → R2 pre-signed URL → NestJS records reference
+| Component     | Technology                                                    |
+| ------------- | ------------------------------------------------------------- |
+| Auth          | Better Auth — identity in LinkBeet's own PostgreSQL           |
+| Payments      | Razorpay Route (merchant of record, 2–5% platform commission) |
+| IaC           | Terraform                                                     |
+| CI/CD         | GitHub Actions                                                |
+| Security      | AWS WAF + Shield — enable at Stage 3 (10k+ users)             |
+| Secrets       | AWS Secrets Manager                                           |
+| Observability | Grafana + Loki from day 1                                     |
 
-### Infrastructure
+### Key Schema (v3.0)
 
-- AWS ECS (Docker) — NestJS, ap-south-1 Mumbai
-- Vercel — Next.js web + admin
-- Terraform — all AWS resources as code
-- GitHub Actions — CI/CD all 4 surfaces
-- AWS WAF + Shield — DDoS, edge rate limiting
-- AWS Secrets Manager — all credentials
-- Grafana + Loki — from Phase 2 day 1
+```
+account           — one per email/phone, mode (normal|business), industry tag, default_landing_screen
+catalogue_item    — type: product | service, linked to account
+booking           — service item, slot, status lifecycle
+order             — product item, cart, payment, fulfilment status
+connection        — requester_id, recipient_id, status (pending|accepted|declined)
+review            — linked to completed booking or order (verified transaction only)
+referral          — referrer_id, referred_id, status, reward_dispatched
+video_embed       — account_id, platform (youtube|instagram|tiktok), url, display_order
+```
 
-### Modules & Responsibilities
+### Module Responsibilities
 
-| Module              | Responsibilities                                                                                                                                                                                       |
-| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| AuthModule          | Better Auth, JWT, OTP, OAuth, anonymous sessions                                                                                                                                                       |
-| AccountModule       | Mode management (normal/business activation), industry tag, default screen preference                                                                                                                  |
-| ProfileModule       | Bio page layout, themes, custom design, link ordering, social media connections, external video embeds (YouTube/Instagram/TikTok), QR code generation, profile preview, slug management, profile share |
-| ConnectionsModule   | Connection requests, accept/decline, connection list, CRM lead sync                                                                                                                                    |
-| DiscoveryModule     | Geo search, text search, Discover feed, Near Me, bookmarks                                                                                                                                             |
-| CommerceModule      | Product catalogue, cart, checkout, orders, order state machine, payouts                                                                                                                                |
-| BookingModule       | Service catalogue, slot management, availability calendar, booking lifecycle, double-booking prevention, reminders                                                                                     |
-| PaymentsModule      | Razorpay Route integration, payment splits, payout triggers, refunds — shared by CommerceModule and BookingModule                                                                                      |
-| CRMModule           | Customer records, lead tracking (visits + connections + saves), messaging, export                                                                                                                      |
-| NotificationsModule | FCM push, deep links, preferences, event dispatch                                                                                                                                                      |
-| RatingsModule       | Review eligibility, review CRUD, trust score, moderation                                                                                                                                               |
-| AnalyticsModule     | Profile views, link clicks, shop metrics, discovery metrics                                                                                                                                            |
-| ReferralModule      | Referral link generation, signup tracking, double-sided reward dispatch (1 month free Business mode for referrer + new user)                                                                           |
-| AdminModule         | User management, verification, moderation, platform analytics, feature flags                                                                                                                           |
-
-**Note on CommerceModule + BookingModule:** Both stay separate at the backend — product orders and
-service bookings have different state machines. A unified `GET /orders` aggregation endpoint merges
-both for the frontend so users see one "orders" feed regardless of type.
+| Module                | Responsibilities                                                                                                                                                            |
+| --------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `AuthModule`          | Better Auth, JWT, OTP, OAuth, anonymous sessions                                                                                                                            |
+| `AccountModule`       | Mode management (normal/business activation), industry tag, default screen preference                                                                                       |
+| `ProfileModule`       | Bio page layout, themes, custom design, link ordering, social media connections, external video embeds, QR code generation, profile preview, slug management, profile share |
+| `ConnectionsModule`   | Connection requests, accept/decline, connection list, CRM lead sync                                                                                                         |
+| `DiscoveryModule`     | Geo search, text search, Discover feed, Near Me, bookmarks                                                                                                                  |
+| `CommerceModule`      | Product catalogue, cart, checkout, orders, order state machine, payouts                                                                                                     |
+| `BookingModule`       | Service catalogue, slot management, availability calendar, booking lifecycle, double-booking prevention, reminders                                                          |
+| `PaymentsModule`      | Razorpay Route integration, payment splits, payout triggers, refunds — shared by CommerceModule and BookingModule                                                           |
+| `CRMModule`           | Customer records, lead tracking, export                                                                                                                                     |
+| `NotificationsModule` | FCM push, deep links, preferences, event dispatch                                                                                                                           |
+| `RatingsModule`       | Review eligibility, review CRUD, trust score, moderation                                                                                                                    |
+| `AnalyticsModule`     | Profile views, link clicks, shop metrics, discovery metrics                                                                                                                 |
+| `ReferralModule`      | Referral link generation, signup tracking, double-sided reward dispatch                                                                                                     |
+| `AdminModule`         | User management, verification, moderation, platform analytics, feature flags                                                                                                |
 
 ---
 
@@ -698,19 +779,19 @@ should not break when implementation details change, only when observable behavi
 
 ### Modules to test
 
-| Module              | Test Type          | What to test                                                                                                            |
-| ------------------- | ------------------ | ----------------------------------------------------------------------------------------------------------------------- |
-| AuthModule          | Unit + Integration | OTP flow, JWT issue/refresh/revoke, OAuth callback, anonymous session creation, post-login redirect with pending action |
-| AccountModule       | Unit + Integration | Business mode one-time activation, mode gate enforcement (403 on business endpoints for normal mode), industry tag CRUD |
-| ProfileModule       | Unit + Integration | Slug uniqueness, theme CRUD, link ordering, external video embed URL validation, QR code generation                     |
-| ConnectionsModule   | Unit + Integration | Request/accept/decline flow, duplicate request prevention, CRM lead sync on accept                                      |
-| DiscoveryModule     | Unit + Integration | Geo radius queries, Meilisearch sync on profile update, anonymous access allowed, city-level vs hyperlocal fallback     |
-| CommerceModule      | Unit + Integration | Cart calculations, order state machine, Business mode gate                                                              |
-| BookingModule       | Unit + Integration | Slot availability, double-booking prevention, booking state transitions, reminder dispatch, Business mode gate          |
-| PaymentsModule      | Integration        | Razorpay Route split logic, payout trigger on order/booking completion, refund flow, webhook handling                   |
-| ReferralModule      | Unit + Integration | Referral link generation, signup attribution, duplicate referral prevention, reward dispatch on qualified signup        |
-| RatingsModule       | Unit               | Review eligibility (completed transaction only), trust score computation                                                |
-| NotificationsModule | Unit               | Event-to-notification mapping, preference filtering, connection request notifications                                   |
+| Module                | Test Type          | What to test                                                                                                            |
+| --------------------- | ------------------ | ----------------------------------------------------------------------------------------------------------------------- |
+| `AuthModule`          | Unit + Integration | OTP flow, JWT issue/refresh/revoke, OAuth callback, anonymous session creation, post-login redirect with pending action |
+| `AccountModule`       | Unit + Integration | Business mode one-time activation, mode gate enforcement (403 on business endpoints for normal mode), industry tag CRUD |
+| `ProfileModule`       | Unit + Integration | Slug uniqueness, theme CRUD, link ordering, external video embed URL validation, QR code generation                     |
+| `ConnectionsModule`   | Unit + Integration | Request/accept/decline flow, duplicate request prevention, CRM lead sync on accept                                      |
+| `DiscoveryModule`     | Unit + Integration | Geo radius queries, Meilisearch sync on profile update, anonymous access allowed, city-level vs hyperlocal fallback     |
+| `CommerceModule`      | Unit + Integration | Cart calculations, order state machine, Business mode gate                                                              |
+| `BookingModule`       | Unit + Integration | Slot availability, double-booking prevention, booking state transitions, reminder dispatch, Business mode gate          |
+| `PaymentsModule`      | Integration        | Razorpay Route split logic, payout trigger on order/booking completion, refund flow, webhook handling                   |
+| `ReferralModule`      | Unit + Integration | Referral link generation, signup attribution, duplicate referral prevention, reward dispatch on qualified signup        |
+| `RatingsModule`       | Unit               | Review eligibility (completed transaction only), trust score computation                                                |
+| `NotificationsModule` | Unit               | Event-to-notification mapping, preference filtering, connection request notifications                                   |
 
 ### Testing principles
 
@@ -731,9 +812,9 @@ should not break when implementation details change, only when observable behavi
 - Private messaging between connections — Phase 3
 - Native video upload on bio profiles (storage + transcoding) — Phase 3
 - Kafka MSK event bus upgrade — Phase 4
-- AWS EKS / Kubernetes — Phase 4
+- AWS EKS / Kubernetes — Phase 5
 - Regional language search (Hindi, Tamil, Telugu etc.) — Phase 4
-- International payments via Stripe — Phase 3
+- International payments via Stripe — Phase 5
 - Background location tracking on mobile
 - Live streaming
 - Multi-vendor marketplace
@@ -746,44 +827,50 @@ should not break when implementation details change, only when observable behavi
 
 ## Pre-Build Checklist
 
-- [ ] Run Lighthouse / PageSpeed audit on linkbeet.in — fix LCP before Phase 2 build
-- [ ] Set up imgproxy pipeline for existing images
-- [ ] Provision RDS PostgreSQL 16 + PostGIS in ap-south-1 via Terraform
-- [ ] Enable PostGIS: `CREATE EXTENSION postgis; CREATE EXTENSION postgis_topology;`
+- [ ] Provision RDS PostgreSQL 16 + PostGIS in ap-south-1 via Terraform (start db.t3.micro)
+- [ ] Run: `CREATE EXTENSION postgis; CREATE EXTENSION postgis_topology;`
 - [ ] Set up AWS Secrets Manager for all credentials
-- [ ] Set up Docker Compose at Turborepo root (Postgres + PostGIS + Redis + pgAdmin) for local dev
-- [ ] Set up Grafana + Loki (observability from day 1)
+- [ ] Configure ECS cluster — single t3.small node, tasks for web, admin, api
+- [ ] Set up CloudFront distribution in front of ECS (enable from day 1)
+- [ ] Set up EC2 t3.micro for Meilisearch + imgproxy
+- [ ] Create Cloudflare R2 bucket, configure imgproxy, test WebP output
+- [ ] Set up Grafana + Loki before first feature ships
 - [ ] Set up staging environment (RDS db.t3.micro, ECS staging cluster)
 - [ ] Set up GitHub Actions CI/CD pipelines for all 4 surfaces
+- [ ] Docker Compose at monorepo root (Postgres + PostGIS + Redis + pgAdmin + Meilisearch)
+- [ ] `packages/mock-services` scaffolded with real API shapes
+- [ ] README with one-command local setup
+- [ ] Razorpay Route — test + production credentials in Secrets Manager
+- [ ] Firebase project — FCM + Dynamic Links configured
 
 ---
 
 ## Further Notes
 
 - All AWS infrastructure in ap-south-1 (Mumbai) — non-negotiable for Indian user latency
-- Better Auth chosen over Firebase Auth — all user identity stays in LinkBeet's PostgreSQL,
-  important for DPDP compliance
+- Better Auth over Firebase Auth — all user identity stays in LinkBeet's PostgreSQL, required for
+  DPDP compliance
 - Redis Streams as event bus in Phase 2 — migrate to Kafka MSK only when Redis Streams becomes a
   bottleneck (Phase 4)
 - imgproxy + Cloudflare R2 is the single highest-impact change for 3G performance — prioritise in
-  first sprint
+  Sprint 0
 - Firebase Dynamic Links (WhatsApp deep linking) is the primary organic growth driver for India —
   implement at launch
-- Turborepo monorepo: `apps/web`, `apps/admin`, `apps/mobile`, `apps/api`, `packages/shared`
 - Anonymous access is a top-of-funnel priority — every friction point before login costs users in
   the Indian market
 - Normal vs Business mode is the core product axis — not industry, not user type. Industry is purely
-  a discovery tag.
-- Business mode activation is a meaningful product moment — design it as an upgrade screen, not a
-  settings toggle
+  a discovery tag
+- Business mode activation is a meaningful product moment — design it as a full-screen upgrade, not
+  a settings toggle
 - Connections feed into CRM as leads — this is the organic growth loop for Business mode users
-- No bottom tab bar — navigation follows ChatGPT/Perplexity model: hamburger sidebar + avatar
-  dropdown + contextual FAB
 - Phase 2 is a fresh build from scratch — Phase 1 at linkbeet.in stays live during development. Data
-  cutover happens at launch, not during build.
+  cutover happens at launch, not during build
+- Cost reality: ₹5,000–10,000/month on day 1. ₹25,000–40,000/month at 50k+ users. Cost grows with
+  users, not before users.
 
 ---
 
-_PRD v2.3 — updated: ProfileModule, PaymentsModule, ReferralModule, video embeds,
-CommerceModule/BookingModule separation confirmed — April 2026_ _Previous version: v2.2
-(April 2026)_ _Stack reference: linkbeet_phase2_stack.md_
+_PRD v3.0 — April 2026_ _Changes from v2.3: Technical stack section rewritten — Vercel removed, both
+web and admin on AWS ECS + CloudFront, scaling philosophy added, day 1 vs scaled setup documented,
+cost stages added, Redis deferred to Stage 2, WAF deferred to Stage 3._ _Stack reference:
+`linkbeet_v2_phase2_stack.md`_

@@ -1,3 +1,17 @@
+---
+gsd_state_version: 1.0
+milestone: v2.3
+milestone_name: milestone
+status: in_progress
+last_updated: '2026-04-16T10:58:13.019Z'
+progress:
+  total_phases: 3
+  completed_phases: 0
+  total_plans: 6
+  completed_plans: 0
+  percent: 0
+---
+
 # LinkBeet v2 — STATE.md
 
 _Project memory — updated at each phase transition | PRD: v2.3_
@@ -6,12 +20,15 @@ _Project memory — updated at each phase transition | PRD: v2.3_
 
 ## Current Position
 
+Phase: 03 (discovery-search-screens) — ✅ COMPLETE
+
 - **Milestone**: 1 (Phase 2 Core Build)
-- **Current Phase**: 2 — Completed (Test Drive)
+- **Current Phase**: 3 — ✅ COMPLETE (all plans done)
 - **PRD Version**: v2.3 (April 2026)
 - **Target Launch**: July 2026 (Soft Launch)
 - **Build Approach**: **UI-first** — all screens (web + mobile together) before backend
-- **Next Action**: `/gsd-discuss-phase 3` → `/gsd-plan-phase 3` → `/gsd-execute-phase 3`
+- **Mobile Stack**: Flutter (migrated from Expo React Native in Phase 3 plan 01)
+- **Next Action**: `/gsd-discuss-phase 4` when ready to plan the next phase
 
 ---
 
@@ -22,8 +39,21 @@ _Project memory — updated at each phase transition | PRD: v2.3_
   - Created unified `api/` NestJS monolith with 20 feature module scaffolds
   - Fixed auth build stubs + Husky hooks
   - Removed legacy web API routes
-- **April 2026 (today)**: GSD context engineering initialized + aligned with PRD v2.3
+- **April 2026**: GSD context engineering initialized + aligned with PRD v2.3
   - Codebase mapped (7 documents), planning files created, PRD fully integrated
+- **April 2026 (Phase 01 + 02)**: Design system locked + web discovery test drive shipped
+  - DESIGN.md locked: "Spatial AI Light" — Apple Blue `#0071e3`, pure light mode, Inter/system font
+  - Web AppShell, Sidebar, TopBar, Discovery home page built and validated
+- **April 2026 (Phase 03 plans 01–02)**: Flutter migration + core theme built
+  - Expo React Native replaced with Flutter + Clean Architecture scaffold
+  - All 7 Flutter theme files rewritten to match DESIGN.md exactly (app_colors, app_theme,
+    app_font_sizes, app_radius, app_spacing, app_sizes, app_durations)
+  - `my_app.dart` wired with `AppTheme.lightTheme` + `ThemeMode.light`
+  - `pubspec.yaml` updated — splash/icon colors aligned to Apple Blue `#0071e3`
+  - `shared/ui` package deleted — React components cannot be shared with Flutter
+  - `cn` utility migrated from `@linkbeet/ui` → `@linkbeet/utils`
+  - `@linkbeet/ui` removed from web + admin `package.json`
+  - GSD updated to v1.36.0
 
 ---
 
@@ -48,6 +78,7 @@ _Project memory — updated at each phase transition | PRD: v2.3_
 
 | Decision                                 | Rationale                                                                                      |
 | ---------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| **Flutter (not Expo React Native)**      | Migrated in Phase 3 plan 01 — better performance, native feel, single codebase for iOS+Android |
 | NestJS Monolith on Fastify               | Faster dev, ops simplicity at <1M users                                                        |
 | Better Auth (not NextAuth/Firebase Auth) | User data stays in our PostgreSQL (DPDP compliance)                                            |
 | Razorpay Route (merchant of record)      | India-native, UPI, auto-splits. Platform = merchant, collects full payment, splits to seller.  |
@@ -65,6 +96,7 @@ _Project memory — updated at each phase transition | PRD: v2.3_
 1. **Prisma schema empty** — nothing persists until schema defined (Phase 10 — backend)
 2. **Better Auth uses mock DB** — auth broken at runtime until Prisma adapter wired (Phase 11 —
    backend)
+
 3. **CORS wildcard** — security issue, must fix before production (Phase 10 — backend)
 
 > **Note**: These are NOT blockers for UI work. UI phases use mock/static data. Backend blockers
@@ -81,6 +113,7 @@ _Project memory — updated at each phase transition | PRD: v2.3_
 - Business mode activation: set `mode = 'business'` — never reverted
 - Backend gates: middleware checks `mode` on seller/provider endpoints → 403
   `business_mode_required` for Normal
+
 - Smart default: Normal → Discovery screen, Business → Dashboard screen
 
 ### Anonymous Sessions
@@ -146,32 +179,42 @@ _Project memory — updated at each phase transition | PRD: v2.3_
 ## Environment Variables Required
 
 ```
+
 # Database
+
 DATABASE_URL
 
 # Redis
+
 REDIS_HOST, REDIS_PORT, REDIS_PASSWORD
 
 # Auth
+
 BETTER_AUTH_SECRET, BETTER_AUTH_URL
 JWT_SECRET, JWT_ACCESS_EXPIRES_IN (15m), JWT_REFRESH_EXPIRES_IN (7d)
 
 # Search
+
 MEILISEARCH_HOST, MEILISEARCH_API_KEY
 
 # Payments
+
 RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET, RAZORPAY_WEBHOOK_SECRET
 
 # Storage
+
 R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, R2_BUCKET_NAME, R2_PUBLIC_URL
 
 # Media
+
 IMGPROXY_URL, IMGPROXY_KEY, IMGPROXY_SALT
 
 # Notifications
+
 FIREBASE_PROJECT_ID, FIREBASE_CLIENT_EMAIL, FIREBASE_PRIVATE_KEY
 
 # App
+
 APP_PORT (3000), APP_ENV, FRONTEND_URL
 ```
 
@@ -191,19 +234,19 @@ APP_PORT (3000), APP_ENV, FRONTEND_URL
 
 ### Part 1 — UI (screen-by-screen, web + mobile)
 
-| Phase                                          | Status | Date       | Notes                                           |
-| ---------------------------------------------- | ------ | ---------- | ----------------------------------------------- |
-| Legacy cleanup                                 | ✅     | April 2026 | Microservices → monolith migration              |
-| GSD initialized                                | ✅     | April 2026 | Codebase mapped, planning aligned with PRD v2.3 |
-| 1 — Design System & Shared UI                  | ✅     | April 2026 | Design tokens, shared UI components, nav shells |
-| 2 — Web Discovery Test Drive (Override)        | ✅     | April 2026 | Web UI validation of tokens + AppShell          |
-| 3 — Discovery & Search Screens                 | ⬜     | —          | Full cross-platform implementation              |
-| 4 — Bio Profile Screens                        | ⬜     | —          |                                                 |
-| 5 — Account & Settings Screens                 | ⬜     | —          |                                                 |
-| 6 — Commerce & Booking Screens                 | ⬜     | —          |                                                 |
-| 7 — Connections, CRM & Social Screens          | ⬜     | —          |                                                 |
-| 8 — Ratings, Notifications & Analytics Screens | ⬜     | —          |                                                 |
-| 9 — Admin Panel Screens                        | ⬜     | —          |                                                 |
+| Phase                                          | Status | Date       | Notes                                                                              |
+| ---------------------------------------------- | ------ | ---------- | ---------------------------------------------------------------------------------- |
+| Legacy cleanup                                 | ✅     | April 2026 | Microservices → monolith migration                                                 |
+| GSD initialized                                | ✅     | April 2026 | Codebase mapped, planning aligned with PRD v2.3                                    |
+| 1 — Design System & Shared UI                  | ✅     | April 2026 | Design tokens, web nav shells (AppShell/Sidebar/TopBar); `shared/ui` later removed |
+| 2 — Web Discovery Test Drive (Override)        | ✅     | April 2026 | Web home screen built + validated; DESIGN.md locked                                |
+| 3 — Discovery & Search Screens                 | 🔄     | April 2026 | Plans 01+02 done (Flutter scaffold + theme); 03+04 pending                         |
+| 4 — Bio Profile Screens                        | ⬜     | —          |                                                                                    |
+| 5 — Account & Settings Screens                 | ⬜     | —          |                                                                                    |
+| 6 — Commerce & Booking Screens                 | ⬜     | —          |                                                                                    |
+| 7 — Connections, CRM & Social Screens          | ⬜     | —          |                                                                                    |
+| 8 — Ratings, Notifications & Analytics Screens | ⬜     | —          |                                                                                    |
+| 9 — Admin Panel Screens                        | ⬜     | —          |                                                                                    |
 
 ### Part 2 — Backend (after ALL UI is done)
 

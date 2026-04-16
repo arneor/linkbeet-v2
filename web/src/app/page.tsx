@@ -1,117 +1,146 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
-import { AppShell } from '@/components/layout'
-import { Search, MapPin, Sparkles, Mic, ArrowRight, SlidersHorizontal } from 'lucide-react'
+import { ArrowRight, Mic, Search, TrendingUp } from 'lucide-react'
+import Image from 'next/image'
+import React, { useState } from 'react'
 
-export default function DiscoveryTestDrive() {
-  const [greeting, setGreeting] = useState('Good evening')
+import { AppShell } from '@/components/layout'
+
+const TRENDING = [
+  { label: 'Top-rated coffee shops near me', icon: 'location' },
+  { label: 'Affordable salons open now', icon: 'location' },
+  { label: 'Street food vendors around me', icon: 'location' },
+  { label: 'Event photographers in the city', icon: 'trending' },
+  { label: 'Fitness trainers accepting clients', icon: 'trending' },
+  { label: 'Digital creators for brand promos', icon: 'trending' },
+  { label: 'Budget-friendly co-working spaces', icon: 'trending' },
+] as const
+
+export default function DiscoveryPage() {
   const [isFocused, setIsFocused] = useState(false)
   const [query, setQuery] = useState('')
 
-  // Determine greeting based on time of day
-  useEffect(() => {
-    const hour = new Date().getHours()
-    if (hour < 12) setGreeting('Good morning')
-    else if (hour < 18) setGreeting('Good afternoon')
-    else setGreeting('Good evening')
-  }, [])
+  const showDropdown = isFocused
 
   return (
     <AppShell currentPath="/">
-      {/* 
-        We use min-h-[calc(100vh-100px)] to consume the entire vertical space 
-        provided by AppShell (accounting for its internal py-6 padding).
-      */}
-      <div className="flex flex-col w-full min-h-[calc(100vh-100px)] relative justify-center">
-        {/* Main Interaction Zone (Light Mode AI Chat Paradigm) */}
-        <div className="flex-1 flex flex-col justify-center items-center px-4 md:px-8 max-w-3xl mx-auto w-full">
-
-          {/* Conversational Greeting */}
-          <div className="w-full flex flex-col items-center text-center animate-[fadeInUp_0.8s_ease-out_both]">
-            <h1 className="text-3xl md:text-[44px] font-medium tracking-tight text-slate-900 mb-3">
-              {greeting}, Nidhin.
-            </h1>
-            <p className="text-lg md:text-xl text-slate-500 font-normal tracking-tight">
-              What are you exploring today?
-            </p>
-          </div>
-
-          {/* Deep Chat-Style Input Container */}
-          <div className="w-full mt-10 relative z-20 animate-[fadeInUp_0.8s_ease-out_0.1s_both]">
-            <div
-              className={`
-                relative w-full rounded-[24px] bg-white border transition-all duration-300 overflow-hidden flex flex-col justify-center
-                ${isFocused ? 'border-[#0071e3]/40 shadow-[0_4px_30px_rgba(0,113,227,0.15)] ring-4 ring-[#0071e3]/5' : 'border-slate-200 shadow-[0_8px_30px_rgba(0,0,0,0.06)]'}
-              `}
-            >
-              <div className="absolute top-[22px] left-5 pointer-events-none">
-                <Search className={`w-[22px] h-[22px] transition-colors duration-300 ${isFocused ? 'text-[#0071e3]' : 'text-slate-400'}`} />
-              </div>
-
-              <textarea
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                onFocus={() => setIsFocused(true)}
-                onBlur={() => setIsFocused(false)}
-                placeholder="Ask to find a cafe, book a salon, or hire a creator..."
-                className="w-full bg-transparent text-slate-900 text-[17px] md:text-xl pl-14 pr-[100px] py-[20px] min-h-[140px] max-h-[300px] resize-none outline-none placeholder:text-slate-300 font-normal tracking-tight leading-relaxed"
-              />
-
-              <div className="absolute right-3 bottom-3 flex items-center gap-2">
-                <button
-                  className="flex items-center justify-center w-[40px] h-[40px] rounded-full text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors"
-                >
-                  <Mic className="w-[20px] h-[20px]" />
-                </button>
-                <button
-                  className={`
-                    flex items-center justify-center w-[40px] h-[40px] rounded-[20px] transition-all duration-300
-                    ${query.length > 0 ? 'bg-[#0071e3] text-white hover:bg-[#0077ED] scale-100 shadow-md' : 'bg-slate-50 text-slate-300 border border-slate-200 scale-95 hover:bg-slate-100'}
-                  `}
-                >
-                  <ArrowRight className="w-[20px] h-[20px]" />
-                </button>
-              </div>
-            </div>
-
-            {/* Filter Buttons row precisely below the input */}
-            <div className="flex flex-wrap items-center justify-center gap-2 mt-5">
-              <button className="px-3 py-1.5 flex items-center gap-2 text-[13px] font-medium text-slate-600 bg-white border border-slate-200 rounded-full hover:bg-slate-50 transition-colors shadow-sm active:scale-95">
-                <SlidersHorizontal className="w-3.5 h-3.5" /> Filters
-              </button>
-              <span className="w-px h-4 bg-slate-200 mx-1" />
-              <button className="px-4 py-1.5 text-[13px] font-medium text-slate-600 bg-white border border-slate-200 rounded-full hover:bg-slate-50 transition-colors shadow-sm active:scale-95">Restaurants</button>
-              <button className="px-4 py-1.5 text-[13px] font-medium text-slate-600 bg-white border border-slate-200 rounded-full hover:bg-slate-50 transition-colors shadow-sm active:scale-95">Salons & Spas</button>
-              <button className="px-4 py-1.5 text-[13px] font-medium text-slate-600 bg-white border border-slate-200 rounded-full hover:bg-slate-50 transition-colors shadow-sm active:scale-95">Creators</button>
-              <button className="px-4 py-1.5 text-[13px] font-medium text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-full hover:bg-emerald-100 transition-colors shadow-sm active:scale-95">Open Now</button>
-            </div>
-          </div>
-
-          {/* Floating Prompt Suggestions */}
-          <div className="w-full mt-10 flex flex-wrap justify-center gap-3 animate-[fadeInUp_0.8s_ease-out_0.2s_both]">
-            <button className="px-4 py-2.5 bg-white border border-slate-200 shadow-sm rounded-2xl hover:bg-slate-50 transition-all text-[14px] font-medium text-slate-600 flex items-center gap-2 active:scale-95">
-              <MapPin className="w-[18px] h-[18px] text-emerald-500" /> Open barbershops near me
-            </button>
-            <button className="px-4 py-2.5 bg-white border border-slate-200 shadow-sm rounded-2xl hover:bg-slate-50 transition-all text-[14px] font-medium text-slate-600 flex items-center gap-2 active:scale-95">
-              <Sparkles className="w-[18px] h-[18px] text-purple-500" /> Top-rated specialty coffee
-            </button>
-            <button className="px-4 py-2.5 bg-white border border-slate-200 shadow-sm rounded-2xl hover:bg-slate-50 transition-all text-[14px] font-medium text-slate-600 flex items-center gap-2 active:scale-95 md:flex">
-              <Search className="w-[18px] h-[18px] text-[#0071e3]" /> Photographers for an event
-            </button>
-          </div>
+      <div className="flex flex-col items-center justify-start pt-[6vh] md:pt-0 md:justify-center w-full min-h-[calc(100dvh-100px)] px-1 md:px-0">
+        {/* ── Logo block ── */}
+        <div className="flex items-center gap-3 mb-8 animate-[fadeInUp_0.6s_ease-out_both]">
+          <Image
+            src="/black-logo.png"
+            alt="LinkBeet"
+            width={48}
+            height={48}
+            className="md:w-[48px] md:h-[48px] w-[40px] h-[40px] object-contain"
+            priority
+            unoptimized
+          />
+          <span className="text-[36px] md:text-[52px] font-medium tracking-tight text-slate-900 leading-none">
+            LinkBeet
+          </span>
         </div>
 
-      </div>
+        {/* ── Search bar + dropdown wrapper ── */}
+        <div className="w-full max-w-[584px] animate-[fadeInUp_0.6s_ease-out_0.08s_both] relative z-50">
+          {/* Search pill */}
+          <div
+            className={[
+              'relative flex items-center w-full h-[52px] md:h-[52px] bg-white border transition-all duration-200',
+              showDropdown
+                ? 'rounded-[26px] md:rounded-t-[26px] md:rounded-b-none border-slate-200 md:border-b-transparent shadow-[0_2px_12px_rgba(0,0,0,0.06)] md:shadow-[0_-2px_12px_rgba(0,0,0,0.06)]'
+                : 'rounded-full border-slate-200 shadow-[0_2px_12px_rgba(0,0,0,0.06)] hover:shadow-[0_4px_20px_rgba(0,0,0,0.09)]',
+            ].join(' ')}
+          >
+            {/* Search icon */}
+            <span className="absolute left-4 md:left-4 pointer-events-none">
+              <Search
+                className={`w-[20px] h-[20px] transition-colors duration-200 ${isFocused ? 'text-accent' : 'text-slate-400'}`}
+              />
+            </span>
 
-      <style dangerouslySetInnerHTML={{
-        __html: `
-        @keyframes fadeInUp {
-          from { opacity: 0; transform: translateY(15px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-      `
-      }} />
+            {/* Input */}
+            <input
+              type="text"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              onFocus={() => setIsFocused(true)}
+              onBlur={() => setIsFocused(false)}
+              placeholder="Find a cafe, book a salon, hire a creator..."
+              className="w-full h-full bg-transparent text-slate-900 text-[16px] md:text-[17px] pl-[48px] pr-[96px] outline-none placeholder:text-slate-400 font-normal tracking-tight"
+            />
+
+            {/* Right controls */}
+            <div className="absolute right-2 flex items-center gap-1">
+              <button
+                className="flex items-center justify-center w-[40px] h-[40px] md:w-[36px] md:h-[36px] rounded-full text-slate-400 hover:text-slate-600 focus:bg-slate-100 hover:bg-slate-100 transition-colors"
+                aria-label="Voice search"
+                onMouseDown={(e) => e.preventDefault()}
+              >
+                <Mic className="w-[20px] h-[20px] md:w-[18px] md:h-[18px]" />
+              </button>
+              <button
+                aria-label="Search"
+                className={[
+                  'flex items-center justify-center w-[40px] h-[40px] md:w-[36px] md:h-[36px] rounded-full transition-all duration-200',
+                  query.length > 0
+                    ? 'bg-accent text-white hover:bg-accent-hover shadow-sm scale-100'
+                    : 'bg-slate-100 text-slate-300 scale-95',
+                ].join(' ')}
+                onMouseDown={(e) => e.preventDefault()}
+              >
+                <ArrowRight className="w-[20px] h-[20px] md:w-[18px] md:h-[18px]" />
+              </button>
+            </div>
+          </div>
+
+          {/* ── Trending dropdown ── */}
+          <div
+            className={[
+              'z-50 bg-white',
+              // Mobile classes: always visible, relative flow, respecting container padding
+              'max-md:relative max-md:mt-6 max-md:w-full',
+              'max-md:border-none max-md:shadow-none max-md:rounded-none max-md:overflow-visible',
+              'block',
+              // Desktop classes: absolutely positioned, border/shadow, visibility tied to showDropdown
+              'md:absolute md:left-0 md:right-0 md:top-[52px]',
+              'md:border md:border-t-0 md:border-slate-200 md:rounded-b-[26px] md:shadow-[0_8px_24px_rgba(0,0,0,0.08)] md:overflow-hidden',
+              showDropdown ? 'md:block animate-[fadeIn_0.15s_ease-out]' : 'md:hidden',
+            ].join(' ')}
+          >
+            {/* Divider line for desktop */}
+            <div className="hidden md:block mx-4 h-px bg-slate-100" />
+
+            <div className="py-2 md:px-2 md:pt-2 md:pb-3 px-0">
+              <p className="mb-4 md:mb-0 md:px-3 md:py-1.5 text-[14px] md:text-[11px] font-medium md:font-semibold text-slate-800 md:text-slate-400 capitalize md:uppercase md:tracking-widest">
+                Trending searches
+              </p>
+              {TRENDING.map(({ label }, index) => (
+                <div key={label} className="relative group">
+                  <button
+                    onMouseDown={(e) => {
+                      e.preventDefault()
+                      setQuery(label)
+                    }}
+                    className="w-full flex items-center gap-4 md:gap-3 py-[14px] px-0 md:px-3 md:py-2.5 md:rounded-[10px] bg-white hover:bg-slate-50 transition-colors text-left"
+                  >
+                    <span className="shrink-0 flex items-center justify-center w-[24px] h-[24px] md:w-[32px] md:h-[32px] md:rounded-full md:bg-slate-100 md:group-hover:bg-slate-200 transition-colors">
+                      <TrendingUp className="w-[18px] h-[18px] md:w-[14px] md:h-[14px] text-slate-400 md:text-accent" />
+                    </span>
+                    <span className="text-[15px] md:text-[14px] text-slate-700 font-normal leading-snug">
+                      {label}
+                    </span>
+                  </button>
+                  {/* Bottom separating line in mobile mode */}
+                  {index < TRENDING.length - 1 && (
+                    <div className="absolute bottom-0 left-[40px] right-0 h-px bg-slate-200 md:hidden" />
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
     </AppShell>
   )
 }

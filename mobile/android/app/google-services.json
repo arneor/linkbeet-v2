@@ -1,0 +1,67 @@
+{
+  "project_info": {
+    "project_number": "352723984832",
+    "project_id": "linkbeet-ef5b9",
+    "storage_bucket": "linkbeet-ef5b9.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:352723984832:android:d3da8c9629deed6c136825",
+        "android_client_info": {
+          "package_name": "com.example.linkbeet.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBIibLIMODTxooXrJwhbRl4I5zOIxXD4-Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:352723984832:android:ad9d35a38cc00a67136825",
+        "android_client_info": {
+          "package_name": "com.example.linkbeet.dev"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBIibLIMODTxooXrJwhbRl4I5zOIxXD4-Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:352723984832:android:2e993def507e911c136825",
+        "android_client_info": {
+          "package_name": "com.example.linkbeet.stage"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBIibLIMODTxooXrJwhbRl4I5zOIxXD4-Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

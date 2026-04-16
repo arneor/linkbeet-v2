@@ -10,10 +10,14 @@ drive (screenshot validation) + DESIGN.md lock
 ## Phase Boundary
 
 Build the Discovery home, search results, Near Me, and category filter screens — both **web
-(Next.js)** and **mobile (Expo React Native)**.
+(Next.js)** and **mobile (Flutter — Clean Architecture with flutter_bloc + go_router + get_it)**.
 
 All screens use mock data. No backend wiring. The goal is pixel-perfect execution of the locked
 "Spatial AI Light" theme established in Phase 2 test drive.
+
+> **Stack note**: Mobile is Flutter (not Expo React Native). Migrated in plan 03-01. Theme is in
+> `mobile/lib/src/core/theme/` — all 7 files aligned to DESIGN.md. `AppTheme.lightTheme` is wired in
+> `my_app.dart`. `shared/ui` has been removed — React components cannot be shared with Flutter.
 
 </domain>
 
@@ -158,22 +162,23 @@ If location permission not granted: full-screen centered state.
 ### M-01: Search input placement — bottom floating
 
 On mobile Discovery, the search input floats at the **bottom** of the screen (ChatGPT mobile
-pattern), not centered in the page. Fixed to bottom: `position: absolute, bottom: 16px` or
-`SafeAreaView` equivalent. Greeting and suggestions remain centered above.
+pattern), not centered in the page. Flutter: use `Stack` + `Positioned(bottom: 16)` inside
+`SafeArea`. Greeting and suggestions remain centered above.
 
 ### M-02: Filter chips — horizontal scroll
 
-On mobile, filter chips row is `ScrollView horizontal` (React Native) or `overflow-x-auto` (web
-mobile). No wrap. Single row, scrollable.
+On mobile, filter chips row is a horizontal `SingleChildScrollView` (Flutter) with
+`scrollDirection: Axis.horizontal`. No wrap. Single row, scrollable.
 
 ### M-03: Suggestion pills — 2 visible, rest scrollable
 
-On mobile, show 2 suggestion pills by default. Horizontal scroll for more.
+On mobile, show 2 suggestion pills by default. Horizontal `SingleChildScrollView` for more.
 
 ### M-04: Near Me — bottom sheet for radius selector
 
-On mobile, the radius selector triggers a bottom sheet (not chips inline). Bottom sheet: white bg,
-`rounded-t-[24px]`, drag handle at top.
+On mobile, the radius selector triggers a `showModalBottomSheet` (Flutter). Bottom sheet: white bg,
+`borderRadius: BorderRadius.vertical(top: Radius.circular(24))`, drag handle at top. Use
+`AppRadius.searchInput` (24px) for the top corners.
 
 ---
 
@@ -202,8 +207,12 @@ On mobile, the radius selector triggers a bottom sheet (not chips inline). Botto
 
 ## Canonical References
 
-- `DESIGN.md` — Locked design system (authoritative)
-- `web/src/app/page.tsx` — Discovery test drive (reference implementation)
+- `DESIGN.md` — Locked design system (authoritative for both web and mobile)
+- `web/src/app/page.tsx` — Discovery test drive (web reference implementation)
 - `web/src/components/layout/` — AppShell, Sidebar, TopBar (do not rebuild)
+- `mobile/lib/src/core/theme/` — Flutter theme (all 7 files, aligned to DESIGN.md)
+- `mobile/lib/src/app/my_app.dart` — Theme wired here (`AppTheme.lightTheme`)
+- `shared/constants/src/colors.ts` — Web design tokens (mirrors Flutter AppColors)
 - `.planning/phases/01-design-system-shared-ui/01-CONTEXT.md` — Foundation decisions (D-01 through
   D-12, except D-09 which is overridden by T-01 above)
+- **Note**: `shared/ui` has been deleted. Web imports `cn` from `@linkbeet/utils`.

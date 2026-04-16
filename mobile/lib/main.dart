@@ -1,44 +1,23 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:linkbeet/firebase/firebase_options.dart';
+import 'package:linkbeet/src/app/my_app.dart';
 
-import 'src/core/di/injection.dart';
-import 'src/core/router/app_router.dart';
-import 'src/core/ui/theme/app_theme.dart';
-
-void main() async {
+// flutter run --flavor dev -t lib/main_dev.dart
+// flutter run --flavor prod -t lib/main_prod.dart
+// flutter run --flavor stage -t lib/main_stage.dart
+Future<void> main() async {
+  // Ensure binding is initialized if this is run directly (though flavor files do it too)
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Lock to portrait mode
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  // Set preferred orientations
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
 
-  // Set system UI overlay style (light status bar for light theme)
-  SystemChrome.setSystemUIOverlayStyle(
-    const SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
-      statusBarIconBrightness: Brightness.dark,
-      statusBarBrightness: Brightness.light,
-    ),
-  );
-
-  // Initialize dependency injection
-  await configureDependencies();
-
-  runApp(const LinkBeetApp());
-}
-
-class LinkBeetApp extends StatelessWidget {
-  const LinkBeetApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp.router(
-      title: 'LinkBeet',
-      debugShowCheckedModeBanner: false,
-      theme: AppTheme.light,
-      routerConfig: appRouter,
-    );
-  }
+  runApp(const MyApp());
 }

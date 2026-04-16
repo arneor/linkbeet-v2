@@ -1,7 +1,9 @@
-// Apple-inspired spacing (base unit: 8px per DESIGN.md)
+// ─── LinkBeet Spacing — locked 2026-04-15 (DESIGN.md §7) ────────────────────
+// Base unit: 8px. Tailwind spacing scale applies.
+
 export const SPACING = {
   0: 0,
-  0.25: 2, // Micro adjustments
+  0.25: 2,
   0.5: 4,
   0.625: 5,
   0.75: 6,
@@ -29,16 +31,29 @@ export const SPACING = {
   xxl: 48,
 } as const
 
-// Apple border-radius scale (from DESIGN.md §5)
+// ── Named Layout Tokens (DESIGN.md §3 & §7) ──────────────────────────────────
+export const LAYOUT = {
+  sidebarWidth: 260, // Expanded sidebar
+  sidebarCollapsed: 72, // Collapsed sidebar
+  topbarHeight: 48, // Mobile TopBar
+  navItemHeight: 48, // Sidebar nav item height
+  logoBadgeSize: 32, // Sidebar logo badge
+  contentMaxWidth: 980, // Main content container max-width
+} as const
+
+// ── Border Radius Scale (DESIGN.md §6) ───────────────────────────────────────
 export const BORDER_RADIUS = {
   none: 0,
-  micro: 5, // Small containers, link tags
-  standard: 8, // Buttons, product cards, image containers
-  comfortable: 11, // Search inputs, filter buttons
-  large: 12, // Feature panels, lifestyle images
-  pill: 980, // CTA links ("Learn more", "Shop")
-  full: 9999, // Circle (media controls)
+  micro: 5, // Small tags
+  standard: 8, // Buttons, nav items, logo badge, cards
+  comfortable: 11, // Search filters
+  large: 12, // Feature panels, suggestion pills (rounded-2xl)
+  searchInput: 24, // The main search box
+  sendButton: 20, // Circular-ish send button
+  avatar: 9999, // Circular elements
+  pill: 980, // "Learn more" pill links
 } as const
 
 export type SpacingKey = keyof typeof SPACING
+export type LayoutKey = keyof typeof LAYOUT
 export type BorderRadiusKey = keyof typeof BORDER_RADIUS

@@ -20,7 +20,6 @@
     "@hookform/resolvers": "^5.2.2",
     "@linkbeet/constants": "workspace:*",
     "@linkbeet/types": "workspace:*",
-    "@linkbeet/ui": "workspace:*",
     "@linkbeet/utils": "workspace:*",
     "@linkbeet/validations": "workspace:*",
     "@tanstack/react-query": "^5.96.2",

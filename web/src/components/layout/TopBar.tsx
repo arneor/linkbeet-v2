@@ -1,9 +1,10 @@
 'use client'
 
+import { cn } from '@linkbeet/utils'
 import React from 'react'
-import { cn } from '@linkbeet/ui'
 
 // ─── TopBar ───────────────────────────────────────────────────
+// Colors via Tailwind named utilities — no hardcoded hex.
 export interface TopBarProps {
   onMenuToggle: () => void
   userAvatar?: string
@@ -11,20 +12,19 @@ export interface TopBarProps {
   isLoggedIn?: boolean
 }
 
-export function TopBar({ onMenuToggle, userAvatar, userName, isLoggedIn = false }: TopBarProps) {
+export function TopBar({ onMenuToggle }: TopBarProps) {
   return (
     <header
       className={cn(
         'fixed top-0 left-0 right-0 z-50 h-[48px] flex items-center justify-between px-4',
-        'nav-glass text-white',
-        'border-b border-white/10',
+        'bg-transparent text-slate-800',
         'lg:hidden',
       )}
     >
       {/* Left: Hamburger */}
       <button
         onClick={onMenuToggle}
-        className="flex items-center justify-center w-[44px] h-[44px] -ml-2 rounded-[8px] hover:bg-white/10 transition-colors duration-150"
+        className="flex items-center justify-center w-[44px] h-[44px] -ml-2 rounded-[8px] hover:bg-slate-200/50 text-slate-500 hover:text-slate-700 transition-colors duration-150"
         aria-label="Open menu"
       >
         <svg
@@ -43,37 +43,7 @@ export function TopBar({ onMenuToggle, userAvatar, userName, isLoggedIn = false 
         </svg>
       </button>
 
-      {/* Center: Logo */}
-      <div className="flex items-center gap-2">
-        <div className="w-6 h-6 bg-[#0071e3] rounded-[5px] flex items-center justify-center text-white font-semibold text-[10px]">
-          LB
-        </div>
-        <span className="text-[14px] font-semibold tracking-[-0.224px]">LinkBeet</span>
-      </div>
-
-      {/* Right: Avatar or Login */}
-      {isLoggedIn ? (
-        <button className="flex items-center justify-center w-[44px] h-[44px] -mr-2">
-          {userAvatar ? (
-            <img
-              src={userAvatar}
-              alt={userName || 'User'}
-              className="w-7 h-7 rounded-full object-cover"
-            />
-          ) : (
-            <div className="w-7 h-7 rounded-full bg-[#0071e3] flex items-center justify-center text-white text-[10px] font-semibold">
-              {userName?.[0]?.toUpperCase() || '?'}
-            </div>
-          )}
-        </button>
-      ) : (
-        <a
-          href="/login"
-          className="text-[12px] text-[#2997ff] font-normal hover:underline"
-        >
-          Login
-        </a>
-      )}
+      {/* Logo and Right sections removed on mobile per request */}
     </header>
   )
 }

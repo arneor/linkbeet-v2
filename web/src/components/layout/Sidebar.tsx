@@ -1,7 +1,9 @@
 'use client'
 
-import React from 'react'
-import { cn } from '@linkbeet/ui'
+import { cn } from '@linkbeet/utils'
+import Image from 'next/image'
+import Link from 'next/link'
+import React, { useEffect } from 'react'
 
 // ─── Sidebar ──────────────────────────────────────────────────
 export interface SidebarProps {
@@ -26,7 +28,16 @@ const navItems: NavItem[] = [
     label: 'Discover',
     href: '/discover',
     icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <svg
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
         <circle cx="12" cy="12" r="10" />
         <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" />
       </svg>
@@ -36,7 +47,16 @@ const navItems: NavItem[] = [
     label: 'Near Me',
     href: '/near-me',
     icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <svg
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
         <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
         <circle cx="12" cy="10" r="3" />
       </svg>
@@ -46,7 +66,16 @@ const navItems: NavItem[] = [
     label: 'My Bio',
     href: '/bio',
     icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <svg
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
         <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
         <circle cx="12" cy="7" r="4" />
       </svg>
@@ -57,7 +86,16 @@ const navItems: NavItem[] = [
     href: '/dashboard',
     businessOnly: true,
     icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <svg
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
         <rect width="7" height="9" x="3" y="3" rx="1" />
         <rect width="7" height="5" x="14" y="3" rx="1" />
         <rect width="7" height="9" x="14" y="12" rx="1" />
@@ -66,31 +104,19 @@ const navItems: NavItem[] = [
     ),
   },
   {
-    label: 'Bookmarks',
-    href: '/bookmarks',
-    icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z" />
-      </svg>
-    ),
-  },
-  {
-    label: 'Connections',
-    href: '/connections',
-    icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-        <circle cx="9" cy="7" r="4" />
-        <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
-        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-      </svg>
-    ),
-  },
-  {
     label: 'Settings',
     href: '/settings',
     icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <svg
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
         <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
         <circle cx="12" cy="12" r="3" />
       </svg>
@@ -107,33 +133,102 @@ export function Sidebar({
   userName,
   userAvatar,
 }: SidebarProps) {
-  const filteredItems = navItems.filter(
-    (item) => !item.businessOnly || userMode === 'business',
-  )
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'b') {
+        e.preventDefault()
+        onToggle()
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [onToggle])
+
+  const filteredItems = navItems.filter((item) => !item.businessOnly || userMode === 'business')
 
   return (
     <nav
       className={cn(
         'fixed left-0 top-0 h-screen z-40 flex flex-col',
         'bg-slate-50/90 backdrop-blur-xl border-r border-slate-200 text-slate-800',
-        'transition-all duration-300 ease-in-out',
+        'transition-[width] duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)]',
         isCollapsed ? 'w-[72px]' : 'w-[260px]',
       )}
       aria-label="Main navigation"
       role="navigation"
     >
-      {/* Logo */}
-      <div className={cn('flex items-center h-[48px] px-4 shrink-0', !isCollapsed && 'px-5')}>
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-[#0071e3] rounded-[8px] flex items-center justify-center text-white font-semibold text-[14px]">
-            LB
-          </div>
-          {!isCollapsed && (
-            <span className="text-[17px] font-semibold text-slate-900 tracking-[-0.374px] whitespace-nowrap overflow-hidden">
-              LinkBeet
-            </span>
-          )}
-        </div>
+      {/* Top Header Section */}
+      <div
+        className={cn(
+          'flex items-center h-[64px] shrink-0',
+          isCollapsed ? 'justify-center px-0' : 'justify-between px-5',
+        )}
+      >
+        {isCollapsed ? (
+          <button
+            onClick={onToggle}
+            className="group/logo relative flex items-center justify-center w-10 h-10 rounded-[8px] hover:bg-slate-200/50 transition-colors"
+            aria-label="Expand sidebar"
+          >
+            <Image
+              src="/black-logo.png"
+              alt="LinkBeet"
+              width={32}
+              height={32}
+              className="w-8 h-8 object-contain transition-opacity duration-200 group-hover/logo:opacity-0"
+              priority
+              unoptimized
+            />
+            <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover/logo:opacity-100 transition-opacity duration-200 text-slate-500">
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <rect width="18" height="18" x="3" y="3" rx="2" />
+                <path d="M9 3v18" />
+                <path d="m14 9 3 3-3 3" />
+              </svg>
+            </div>
+          </button>
+        ) : (
+          <>
+            <Image
+              src="/black-logo.png"
+              alt="LinkBeet"
+              width={32}
+              height={32}
+              className="w-8 h-8 object-contain"
+              priority
+              unoptimized
+            />
+            <button
+              onClick={onToggle}
+              className="flex items-center justify-center w-8 h-8 rounded-[8px] text-slate-400 hover:bg-slate-200/50 hover:text-slate-700 transition-colors"
+              aria-label="Collapse sidebar"
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <rect width="18" height="18" x="3" y="3" rx="2" />
+                <path d="M9 3v18" />
+                <path d="m16 15-3-3 3-3" />
+              </svg>
+            </button>
+          </>
+        )}
       </div>
 
       {/* Nav Items */}
@@ -145,24 +240,36 @@ export function Sidebar({
               key={item.href}
               href={item.href}
               className={cn(
-                'flex items-center gap-3 h-[48px] px-3 rounded-[8px] transition-colors duration-150 group',
+                'relative flex items-center gap-3 h-[48px] px-3 rounded-[8px] transition-colors duration-150 group',
                 isActive
-                  ? 'bg-[#0071e3]/10 text-[#0071e3]'
+                  ? 'bg-accent/10 text-accent'
                   : 'text-slate-600 hover:bg-slate-200/50 hover:text-slate-900',
                 isCollapsed && 'justify-center px-0',
               )}
-              title={isCollapsed ? item.label : undefined}
             >
-              <span className={cn('shrink-0', isActive && 'text-[#0071e3]')}>
-                {item.icon}
-              </span>
+              <span className={cn('shrink-0', isActive && 'text-accent')}>{item.icon}</span>
               {!isCollapsed && (
                 <span className="text-[12px] font-normal tracking-normal whitespace-nowrap overflow-hidden">
                   {item.label}
                 </span>
               )}
               {isActive && !isCollapsed && (
-                <div className="absolute left-0 w-[2px] h-5 bg-[#0071e3] rounded-r" />
+                <div className="absolute left-0 w-[2px] h-5 bg-accent rounded-r" />
+              )}
+              {/* Tooltip — only visible in collapsed state on hover */}
+              {isCollapsed && (
+                <span
+                  className={cn(
+                    'pointer-events-none absolute left-full ml-3 px-2.5 py-1.5',
+                    'bg-slate-900 text-white text-[12px] font-normal rounded-[6px] whitespace-nowrap',
+                    'opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0',
+                    'transition-all duration-150 ease-out',
+                    'shadow-[0_4px_12px_rgba(0,0,0,0.15)]',
+                    'z-50',
+                  )}
+                >
+                  {item.label}
+                </span>
               )}
             </a>
           )
@@ -172,11 +279,23 @@ export function Sidebar({
       {/* Bottom Section */}
       <div className="shrink-0 border-t border-slate-200 p-2">
         {isLoggedIn ? (
-          <div className={cn('flex items-center gap-3 px-3 py-2', isCollapsed && 'justify-center px-0')}>
+          <div
+            className={cn(
+              'flex items-center gap-3 px-3 py-2',
+              isCollapsed && 'justify-center px-0',
+            )}
+          >
             {userAvatar ? (
-              <img src={userAvatar} alt={userName || 'User'} className="w-8 h-8 rounded-full object-cover shrink-0" />
+              <Image
+                src={userAvatar}
+                alt={userName || 'User'}
+                width={32}
+                height={32}
+                className="w-8 h-8 rounded-full object-cover shrink-0"
+                unoptimized
+              />
             ) : (
-              <div className="w-8 h-8 rounded-full bg-[#0071e3] flex items-center justify-center text-white text-[12px] font-semibold shrink-0">
+              <div className="w-8 h-8 rounded-full bg-accent flex items-center justify-center text-white text-[12px] font-semibold shrink-0">
                 {userName?.[0]?.toUpperCase() || '?'}
               </div>
             )}
@@ -185,46 +304,34 @@ export function Sidebar({
             )}
           </div>
         ) : (
-          <a
+          <Link
             href="/login"
             className={cn(
-              'flex items-center justify-center gap-2 h-[40px] rounded-[8px] bg-[#0071e3] text-white text-[14px] font-normal transition-colors hover:bg-[#0077ED]',
-              isCollapsed && 'w-[40px] mx-auto',
+              'flex items-center justify-center gap-2 h-[44px] rounded-[8px] bg-accent text-white text-[14px] font-normal transition-colors hover:bg-accent-hover shrink-0',
+              isCollapsed && 'w-[44px] h-[44px] mx-auto rounded-full',
             )}
+            title={isCollapsed ? 'Login / Sign Up' : undefined}
           >
             {isCollapsed ? (
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
-                <polyline points="10 17 15 12 10 7" />
-                <line x1="15" x2="3" y1="12" y2="12" />
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M15 12H3" />
+                <path d="m11 8 4 4-4 4" />
+                <path d="M 7 19 A 9 9 0 1 0 7 5" />
               </svg>
             ) : (
-              'Login'
+              <span>Login</span>
             )}
-          </a>
+          </Link>
         )}
-
-        {/* Collapse Toggle */}
-        <button
-          onClick={onToggle}
-          className="flex items-center justify-center w-full h-[36px] mt-1 rounded-[8px] text-slate-400 hover:bg-slate-200/50 hover:text-slate-700 transition-colors duration-150"
-          aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-        >
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className={cn('transition-transform duration-300', isCollapsed && 'rotate-180')}
-          >
-            <path d="m11 17-5-5 5-5" />
-            <path d="m18 17-5-5 5-5" />
-          </svg>
-        </button>
       </div>
     </nav>
   )
