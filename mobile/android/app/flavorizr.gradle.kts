@@ -18,7 +18,7 @@ android.apply {
         }
         create("prod") {
             dimension = "flavor-type"
-            applicationId = "com.example.linkbeet.stage"
+            applicationId = "com.example.linkbeet.app"
             resValue(type = "string", name = "app_name", value = "LinkBeet")
         }
     }
