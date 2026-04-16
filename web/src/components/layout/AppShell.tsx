@@ -1,6 +1,7 @@
 'use client'
 
 import { cn } from '@linkbeet/utils'
+import Image from 'next/image'
 import React, { useCallback, useEffect, useState, startTransition } from 'react'
 
 import { Sidebar } from './Sidebar'
@@ -88,18 +89,20 @@ export function AppShell({
         <div className="relative w-8 h-8 md:w-[42px] md:h-[42px]">
           {/* Back left card */}
           <div className="absolute inset-0 bg-slate-200 rounded-[8px] md:rounded-[10px] shadow-sm transform -rotate-10 -translate-x-[4px] md:-translate-x-[6px] overflow-hidden border-[1.5px] border-white transition-transform duration-300 group-hover:-rotate-15 group-hover:-translate-x-[6px]">
-            <img
+            <Image
               src="https://images.unsplash.com/photo-1541701494587-cb58502866ab?q=80&w=100&auto=format&fit=crop"
               alt=""
-              className="w-full h-full object-cover opacity-90"
+              fill
+              className="object-cover opacity-90"
             />
           </div>
           {/* Back right card */}
           <div className="absolute inset-0 bg-slate-300 rounded-[8px] md:rounded-[10px] shadow-sm transform rotate-12 translate-x-[4px] md:translate-x-[6px] translate-y-[2px] overflow-hidden border-[1.5px] border-white transition-transform duration-300 group-hover:rotate-18 group-hover:translate-x-[8px]">
-            <img
+            <Image
               src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=100&auto=format&fit=crop"
               alt=""
-              className="w-full h-full object-cover opacity-90"
+              fill
+              className="object-cover opacity-90"
             />
           </div>
           {/* Front Center Card */}
