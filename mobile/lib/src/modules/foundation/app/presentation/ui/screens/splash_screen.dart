@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:linkbeet/src/core/constants/app_assets.dart';
+import 'package:linkbeet/src/core/theme/app_sizes.dart';
 import 'package:linkbeet/src/modules/home/presentation/router/home_router_module.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -53,13 +55,19 @@ class _SplashScreenState extends State<SplashScreen>
       body: Center(
         child: FadeTransition(
           opacity: _fadeAnimation,
-          child: Hero(
-            tag: 'linkbeet-splash-logo',
-            child: Image.asset(
-              AppAssets.trueBlackLogo,
-              width: 180,
-              height: 180,
-              color: Colors.black,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: AppSizes.md),
+            child: Hero(
+              tag: 'text-logo',
+              child: SvgPicture.asset(
+                AppAssets.linkbeetTextLogo,
+                width: 60,
+                height: 60,
+                colorFilter: const ColorFilter.mode(
+                  Colors.black,
+                  BlendMode.srcIn,
+                ),
+              ),
             ),
           ),
         ),

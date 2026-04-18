@@ -25,7 +25,7 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   {
-    label: 'Discover',
+    label: 'Home',
     href: '/',
     icon: (
       <svg
@@ -38,8 +38,8 @@ const navItems: NavItem[] = [
         strokeLinecap="round"
         strokeLinejoin="round"
       >
-        <circle cx="12" cy="12" r="10" />
-        <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" />
+        <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+        <polyline points="9 22 9 12 15 12 15 22" />
       </svg>
     ),
   },
@@ -86,41 +86,7 @@ const navItems: NavItem[] = [
     href: '/bookmarks',
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/>
-      </svg>
-    ),
-  },
-  {
-    label: 'Connections',
-    href: '/connections',
-    icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
-        <circle cx="9" cy="7" r="4"/>
-        <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
-        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-      </svg>
-    ),
-  },
-  {
-    label: 'Dashboard',
-    href: '/dashboard',
-    businessOnly: true,
-    icon: (
-      <svg
-        width="20"
-        height="20"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <rect width="7" height="9" x="3" y="3" rx="1" />
-        <rect width="7" height="5" x="14" y="3" rx="1" />
-        <rect width="7" height="9" x="14" y="12" rx="1" />
-        <rect width="7" height="5" x="3" y="16" rx="1" />
+        <path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z" />
       </svg>
     ),
   },
@@ -219,40 +185,40 @@ export function Sidebar({
           </button>
         ) : (
           <>
-          <div className="flex items-center">
-            <Image
-              src="/black-logo.png"
-              alt="LinkBeet"
-              width={32}
-              height={32}
-              className="w-8 h-8 object-contain"
-              priority
-              unoptimized
-            />
-            <span className="font-semibold text-[18px] tracking-tight ml-2.5">LinkBeet</span>
-          </div>
-          <div className="flex items-center gap-1.5 pl-2 pr-1">
-            <button
-              onClick={onToggle}
-              className="flex items-center justify-center w-8 h-8 rounded-[8px] text-slate-400 hover:bg-slate-200/50 hover:text-slate-700 transition-colors"
-              aria-label="Collapse sidebar"
-            >
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
+            <div className="flex items-center">
+              <Image
+                src="/black-logo.png"
+                alt="LinkBeet"
+                width={32}
+                height={32}
+                className="w-8 h-8 object-contain"
+                priority
+                unoptimized
+              />
+              <span className="font-semibold text-[18px] tracking-tight ml-2.5">LinkBeet</span>
+            </div>
+            <div className="flex items-center gap-1.5 pl-2 pr-1">
+              <button
+                onClick={onToggle}
+                className="flex items-center justify-center w-8 h-8 rounded-[8px] text-slate-400 hover:bg-slate-200/50 hover:text-slate-700 transition-colors"
+                aria-label="Collapse sidebar"
               >
-                <rect width="18" height="18" x="3" y="3" rx="2" />
-                <path d="M9 3v18" />
-                <path d="m16 15-3-3 3-3" />
-              </svg>
-            </button>
-          </div>
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <rect width="18" height="18" x="3" y="3" rx="2" />
+                  <path d="M9 3v18" />
+                  <path d="m16 15-3-3 3-3" />
+                </svg>
+              </button>
+            </div>
           </>
         )}
       </div>
@@ -327,8 +293,8 @@ export function Sidebar({
             )}
             {!isCollapsed && (
               <div className="flex flex-col min-w-0">
-                 <span className="text-[13px] font-medium text-slate-900 truncate">{userName || 'Nidhin'}</span>
-                 <span className="text-[11px] text-slate-500 truncate">{userMode === 'business' ? 'Business Mode' : 'Normal Mode'}</span>
+                <span className="text-[13px] font-medium text-slate-900 truncate">{userName || 'Nidhin'}</span>
+                <span className="text-[11px] text-slate-500 truncate">{userMode === 'business' ? 'Business Mode' : 'Normal Mode'}</span>
               </div>
             )}
           </div>

@@ -113,19 +113,38 @@ class _CardInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isVerified = item.tags.contains('Verified');
+    final secondaryTags = item.tags.where((t) => t != 'Verified').toList();
+
     return Padding(
       padding: const EdgeInsets.all(AppSizes.sm + AppSizes.px),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            item.name,
-            style: AppTextStyle.labelMedium(context)?.copyWith(
-              fontWeight: FontWeight.w600,
-              letterSpacing: -0.2,
-            ),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Flexible(
+                child: Text(
+                  item.name,
+                  style: AppTextStyle.labelMedium(context)?.copyWith(
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: -0.2,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              if (isVerified)
+                const Padding(
+                  padding: EdgeInsets.only(left: AppSizes.xs),
+                  child: Icon(
+                    Icons.verified,
+                    color: AppColors.accent,
+                    size: AppSizes.iconSm,
+                  ),
+                ),
+            ],
           ),
           AppSpacing.verticalGap2,
           Text(
@@ -134,11 +153,11 @@ class _CardInfo extends StatelessWidget {
               color: AppColors.textTertiary,
             ),
           ),
-          if (item.tags.isNotEmpty) ...[
+          if (secondaryTags.isNotEmpty) ...[
             AppSpacing.verticalGap4,
             Wrap(
               spacing: AppSizes.xs,
-              children: item.tags.map((t) => _SmallTag(t)).toList(),
+              children: secondaryTags.map((t) => _SmallTag(t)).toList(),
             ),
           ],
           if (item.bioLink != null) ...[

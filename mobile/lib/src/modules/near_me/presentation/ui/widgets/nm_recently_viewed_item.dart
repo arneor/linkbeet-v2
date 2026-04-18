@@ -32,13 +32,28 @@ class NearMeRecentlyViewedItem extends StatelessWidget {
                 shape: BoxShape.circle,
               ),
             ),
-            title: Text(
-              item.name,
-              style: AppTextStyle.bodySmall(context)?.copyWith(
-                fontWeight: FontWeight.w500,
-              ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
+            title: Row(
+              children: [
+                Flexible(
+                  child: Text(
+                    item.name,
+                    style: AppTextStyle.bodySmall(context)?.copyWith(
+                      fontWeight: FontWeight.w500,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                if (item.tags.contains('Verified'))
+                  const Padding(
+                    padding: EdgeInsets.only(left: AppSizes.xs),
+                    child: Icon(
+                      Icons.verified,
+                      color: AppColors.accent,
+                      size: AppSizes.iconSm,
+                    ),
+                  ),
+              ],
             ),
             subtitle: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

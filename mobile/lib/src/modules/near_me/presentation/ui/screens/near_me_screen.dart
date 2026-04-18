@@ -15,6 +15,7 @@ import 'package:linkbeet/src/modules/near_me/presentation/ui/widgets/nm_search_b
 import 'package:linkbeet/src/modules/near_me/presentation/ui/widgets/nm_section_header.dart';
 import 'package:linkbeet/src/modules/near_me/presentation/ui/widgets/nm_top_rated_card.dart';
 import 'package:linkbeet/src/modules/near_me/presentation/ui/widgets/nm_trending_offer_tile.dart';
+import 'package:linkbeet/src/modules/search/presentation/router/search_router_module.dart';
 
 class NearMeScreen extends StatefulWidget {
   const NearMeScreen({super.key});
@@ -47,7 +48,9 @@ class _NearMeScreenState extends State<NearMeScreen> {
                     horizontal: AppSizes.md,
                     vertical: AppSizes.sm + AppSizes.px,
                   ),
-                  child: const NearMeSearchBar(),
+                  child: NearMeSearchBar(
+                    onSearch: (q) => SearchRoute(q: q).push(context),
+                  ),
                 ),
                 NearMeCategoryFilter(
                   categories: kNearMeCategories,

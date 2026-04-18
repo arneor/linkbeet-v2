@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:linkbeet/src/core/constants/app_assets.dart';
 import 'package:linkbeet/src/core/theme/app_colors.dart';
 import 'package:linkbeet/src/core/theme/app_font_sizes.dart';
@@ -15,7 +16,7 @@ class _NavItem {
 }
 
 const _kNavItems = [
-  _NavItem(label: 'Discover', icon: Icons.explore_outlined, path: '/home'),
+  _NavItem(label: 'Home', icon: Icons.home_outlined, path: '/home'),
   _NavItem(
     label: 'Near Me',
     icon: Icons.location_on_outlined,
@@ -88,6 +89,9 @@ class LbDrawer extends StatelessWidget {
                       isActive: isActive,
                       onTap: () {
                         onClose?.call();
+                        if (!isActive) {
+                          context.push(item.path);
+                        }
                       },
                     );
                   }).toList(),

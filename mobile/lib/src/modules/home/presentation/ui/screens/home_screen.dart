@@ -74,7 +74,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         child: Column(
           children: [
-            AppSpacing.verticalGap24,
+            AppSpacing.verticalGap48,
             const DsHomeLogoHeader(),
             AppSpacing.verticalGap32,
             DsHomeSearchInput(

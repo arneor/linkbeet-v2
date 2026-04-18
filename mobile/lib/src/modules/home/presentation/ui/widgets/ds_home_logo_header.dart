@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:linkbeet/src/core/constants/app_assets.dart';
-import 'package:linkbeet/src/core/theme/app_sizes.dart';
-import 'package:linkbeet/src/core/theme/app_spacing.dart';
-import 'package:linkbeet/src/core/theme/app_text_style.dart';
 
 class DsHomeLogoHeader extends StatelessWidget {
   const DsHomeLogoHeader({super.key});
@@ -13,19 +11,15 @@ class DsHomeLogoHeader extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
+        // svg
         Hero(
-          tag: 'linkbeet-splash-logo',
-          child: Image.asset(
-            AppAssets.blackLogo,
-            width: AppSizes.iconXl,
-            height: AppSizes.iconXl,
-            fit: BoxFit.contain,
+          tag: 'text-logo',
+          child: SvgPicture.asset(
+            AppAssets.linkbeetTextLogo,
+            width: 60,
+            height: 60,
+            colorFilter: const ColorFilter.mode(Colors.black, BlendMode.srcIn),
           ),
-        ),
-        AppSpacing.horizontalGap12,
-        Text(
-          'LinkBeet',
-          style: AppTextStyle.headlineLarge(context),
         ),
       ],
     );

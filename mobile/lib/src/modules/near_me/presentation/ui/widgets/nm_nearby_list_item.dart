@@ -72,17 +72,36 @@ class _ItemInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isVerified = item.tags.contains('Verified');
+    final secondaryTags = item.tags.where((t) => t != 'Verified').toList();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          item.name,
-          style: AppTextStyle.bodySmall(context)?.copyWith(
-            fontWeight: FontWeight.w600,
-            letterSpacing: -0.2,
-          ),
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Flexible(
+              child: Text(
+                item.name,
+                style: AppTextStyle.bodySmall(context)?.copyWith(
+                  fontWeight: FontWeight.w600,
+                  letterSpacing: -0.2,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            if (isVerified)
+              const Padding(
+                padding: EdgeInsets.only(left: AppSizes.xs),
+                child: Icon(
+                  Icons.verified,
+                  color: AppColors.accent,
+                  size: AppSizes.iconSm,
+                ),
+              ),
+          ],
         ),
         AppSpacing.verticalGap2,
         Text(
@@ -92,9 +111,9 @@ class _ItemInfo extends StatelessWidget {
             letterSpacing: -0.1,
           ),
         ),
-        if (item.tags.isNotEmpty || item.offerLabel != null) ...[
+        if (secondaryTags.isNotEmpty || item.offerLabel != null) ...[
           AppSpacing.verticalGap6,
-          _TagRow(tags: item.tags, offerLabel: item.offerLabel),
+          _TagRow(tags: secondaryTags, offerLabel: item.offerLabel),
         ],
         if (item.bioLink != null) ...[
           AppSpacing.verticalGap6,
