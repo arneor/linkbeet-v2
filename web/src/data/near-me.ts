@@ -1,0 +1,135 @@
+import type { Category, TopRatedItem, AllNearbyItem, TrendingOffer, RecentlyViewedItem } from './types'
+
+export const CATEGORIES: Category[] = [
+  { icon: '⊞', label: 'All' },
+  { icon: '🍽', label: 'Restaurant' },
+  { icon: '✂️', label: 'Saloon' },
+  { icon: '🏋', label: 'Fitness' },
+  { icon: '👨‍⚕️', label: 'Doctor' },
+  { icon: '🛒', label: 'Store' },
+  { icon: '🎭', label: 'Creator' },
+]
+
+export const TOP_RATED: TopRatedItem[] = [
+  {
+    id: 'green-leaf',
+    name: 'The Green Leaf Cafe',
+    category: 'Restaurant',
+    distanceKm: 0.8,
+    rating: 4.8,
+    avatarColor: '#B5A07A',
+    tags: ['Vegan', 'WiFi'],
+    bioLink: 'linkbeet.in/thegreenleafcafe',
+  },
+  {
+    id: 'luxe-hair',
+    name: 'Luxe Hair Studio',
+    category: 'Saloon',
+    distanceKm: 1.2,
+    rating: 4.9,
+    avatarColor: '#AFBFD4',
+    tags: ['Premium', 'Unisex'],
+    isVerified: true,
+    bioLink: 'linkbeet.in/luxehairstudio',
+  },
+  {
+    id: 'fitzone',
+    name: 'FitZone Gym',
+    category: 'Fitness',
+    distanceKm: 0.5,
+    rating: 4.7,
+    avatarColor: '#D1B8E8',
+    tags: ['24/7', 'Training'],
+    bioLink: 'linkbeet.in/fitzone',
+  },
+]
+
+export const ALL_NEARBY: AllNearbyItem[] = [
+  {
+    id: 'fitzone-all',
+    name: 'FitZone Gym',
+    category: 'Fitness',
+    distanceKm: 0.5,
+    rating: 4.7,
+    avatarColor: '#D1B8E8',
+    badge: 'Verified',
+    badgeType: 'verified',
+    offerLabel: null,
+    bioLink: 'linkbeet.in/fitzone',
+  },
+  {
+    id: 'spice-kitchen',
+    name: 'Spice Kitchen',
+    category: 'Restaurant',
+    distanceKm: 0.9,
+    rating: 4.5,
+    avatarColor: '#FFCA80',
+    badge: null,
+    badgeType: null,
+    offerLabel: '20% Off',
+    bioLink: 'linkbeet.in/spicekitchen',
+  },
+  {
+    id: 'glow-beauty-all',
+    name: 'Glow Beauty Lounge',
+    category: 'Saloon',
+    distanceKm: 1.4,
+    rating: 4.6,
+    avatarColor: '#80D4A0',
+    badge: null,
+    badgeType: null,
+    offerLabel: null,
+    bioLink: 'linkbeet.in/glowbeautylounge',
+  },
+  {
+    id: 'chai-cafe',
+    name: 'Chai & Code Cafe',
+    category: 'Restaurant',
+    distanceKm: 1.8,
+    rating: 4.4,
+    avatarColor: '#E8A0C0',
+    badge: null,
+    badgeType: null,
+    offerLabel: null,
+    bioLink: 'linkbeet.in/chaiandcode',
+  },
+]
+
+export const TRENDING_OFFERS: TrendingOffer[] = [
+  {
+    id: 'o1',
+    icon: '🏷',
+    label: '30% Off First Booking',
+    sub: 'The Green Leaf Cafe',
+    badge: 'HOT',
+    iconBg: '#FFF3E0',
+    iconColor: '#FF9800',
+    bioLink: 'linkbeet.in/thegreenleafcafe',
+  },
+  {
+    id: 'o2',
+    icon: '🎁',
+    label: 'Free Trial Session',
+    sub: 'FitZone Gym',
+    badge: '',
+    iconBg: '#E8F5E9',
+    iconColor: '#4CAF50',
+    bioLink: 'linkbeet.in/fitzone',
+  },
+  {
+    id: 'o3',
+    icon: '✂️',
+    label: '20% Off Haircuts',
+    sub: 'Luxe Hair Studio',
+    badge: '',
+    iconBg: '#E3F2FD',
+    iconColor: '#0071e3',
+    bioLink: 'linkbeet.in/luxehairstudio',
+  },
+]
+
+export const RECENTLY_VIEWED: RecentlyViewedItem[] = [
+  { id: 'r1', name: 'Spice Kitchen', category: 'Restaurant', distanceKm: 0.9, rating: 4.5, avatarColor: '#FFCA80', bioLink: 'linkbeet.in/spicekitchen' },
+  { id: 'r2', name: 'Glow Beauty Lounge', category: 'Saloon', distanceKm: 1.4, rating: 4.6, avatarColor: '#80D4A0', bioLink: 'linkbeet.in/glowbeautylounge' },
+  { id: 'r3', name: 'FitZone Gym', category: 'Fitness', distanceKm: 0.5, rating: 4.7, avatarColor: '#D1B8E8', bioLink: 'linkbeet.in/fitzone' },
+]

@@ -6,3 +6,5 @@ export type { TopBarProps } from './TopBar'
 
 export { AppShell } from './AppShell'
 export type { AppShellProps } from './AppShell'
+
+export { AppShellWrapper } from './AppShellWrapper'

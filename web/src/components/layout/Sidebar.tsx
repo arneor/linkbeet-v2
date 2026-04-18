@@ -26,7 +26,7 @@ interface NavItem {
 const navItems: NavItem[] = [
   {
     label: 'Discover',
-    href: '/discover',
+    href: '/',
     icon: (
       <svg
         width="20"
@@ -78,6 +78,27 @@ const navItems: NavItem[] = [
       >
         <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
         <circle cx="12" cy="7" r="4" />
+      </svg>
+    ),
+  },
+  {
+    label: 'Bookmarks',
+    href: '/bookmarks',
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/>
+      </svg>
+    ),
+  },
+  {
+    label: 'Connections',
+    href: '/connections',
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+        <circle cx="9" cy="7" r="4"/>
+        <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
       </svg>
     ),
   },
@@ -198,6 +219,7 @@ export function Sidebar({
           </button>
         ) : (
           <>
+          <div className="flex items-center">
             <Image
               src="/black-logo.png"
               alt="LinkBeet"
@@ -207,6 +229,9 @@ export function Sidebar({
               priority
               unoptimized
             />
+            <span className="font-semibold text-[18px] tracking-tight ml-2.5">LinkBeet</span>
+          </div>
+          <div className="flex items-center gap-1.5 pl-2 pr-1">
             <button
               onClick={onToggle}
               className="flex items-center justify-center w-8 h-8 rounded-[8px] text-slate-400 hover:bg-slate-200/50 hover:text-slate-700 transition-colors"
@@ -227,6 +252,7 @@ export function Sidebar({
                 <path d="m16 15-3-3 3-3" />
               </svg>
             </button>
+          </div>
           </>
         )}
       </div>
@@ -236,7 +262,7 @@ export function Sidebar({
         {filteredItems.map((item) => {
           const isActive = currentPath === item.href || currentPath.startsWith(item.href + '/')
           return (
-            <a
+            <Link
               key={item.href}
               href={item.href}
               className={cn(
@@ -271,7 +297,7 @@ export function Sidebar({
                   {item.label}
                 </span>
               )}
-            </a>
+            </Link>
           )
         })}
       </div>
@@ -300,7 +326,10 @@ export function Sidebar({
               </div>
             )}
             {!isCollapsed && (
-              <span className="text-[12px] text-slate-700 truncate">{userName || 'User'}</span>
+              <div className="flex flex-col min-w-0">
+                 <span className="text-[13px] font-medium text-slate-900 truncate">{userName || 'Nidhin'}</span>
+                 <span className="text-[11px] text-slate-500 truncate">{userMode === 'business' ? 'Business Mode' : 'Normal Mode'}</span>
+              </div>
             )}
           </div>
         ) : (

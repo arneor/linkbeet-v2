@@ -2,7 +2,9 @@
 
 import { cn } from '@linkbeet/utils'
 import Image from 'next/image'
-import React, { useCallback, useEffect, useState, startTransition } from 'react'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 
 import { Sidebar } from './Sidebar'
 import { TopBar } from './TopBar'
@@ -10,7 +12,6 @@ import { TopBar } from './TopBar'
 // ─── AppShell ─────────────────────────────────────────────────
 export interface AppShellProps {
   children: React.ReactNode
-  currentPath: string
   userMode?: 'normal' | 'business'
   isLoggedIn?: boolean
   userAvatar?: string
@@ -21,45 +22,51 @@ const STORAGE_KEY = 'linkbeet-sidebar-collapsed'
 
 export function AppShell({
   children,
-  currentPath,
   userMode = 'normal',
   isLoggedIn = false,
   userAvatar,
   userName,
 }: AppShellProps) {
-  // Lazy-init from localStorage to avoid setState-in-effect
-  const [isCollapsed, setIsCollapsed] = useState(() => {
-    if (typeof window === 'undefined') return true
+  const pathname = usePathname()
+
+  // ── Sidebar collapsed state ──
+  // Use ref to track if component has hydrated to prevent SSR mismatch
+  const [isHydrated, setIsHydrated] = useState(false)
+  const [isCollapsed, setIsCollapsed] = useState(true) // SSR default
+
+  useEffect(() => {
+    // On mount (client only), read persisted value and mark hydrated
     try {
       const stored = localStorage.getItem(STORAGE_KEY)
-      return stored !== null ? (JSON.parse(stored) as boolean) : true
+      if (stored !== null) {
+        setIsCollapsed(JSON.parse(stored) as boolean)
+      }
     } catch {
-      return true
+      // Ignore
     }
-  })
+    setIsHydrated(true)
+  }, [])
 
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
 
-  // Lazy-init from matchMedia to avoid setState-in-effect
-  const [isMobile, setIsMobile] = useState(() => {
-    if (typeof window === 'undefined') return false
-    return window.matchMedia('(max-width: 1023px)').matches
-  })
-
-  // Keep mobile state in sync with viewport changes
+  // ── Responsive: mobile detection ──
+  const [isMobile, setIsMobile] = useState(false) // SSR default
   useEffect(() => {
     const mq = window.matchMedia('(max-width: 1023px)')
+    setIsMobile(mq.matches)
     const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches)
     mq.addEventListener('change', handler)
     return () => mq.removeEventListener('change', handler)
   }, [])
 
   // Close drawer on route change
+  const prevPathRef = useRef(pathname)
   useEffect(() => {
-    startTransition(() => {
+    if (prevPathRef.current !== pathname) {
       setIsDrawerOpen(false)
-    })
-  }, [currentPath])
+      prevPathRef.current = pathname
+    }
+  }, [pathname])
 
   const handleToggleSidebar = useCallback(() => {
     setIsCollapsed((prev) => {
@@ -79,12 +86,22 @@ export function AppShell({
 
   const sidebarWidth = isCollapsed ? 72 : 260
 
+  // Routes that get their own full-screen layout (no sidebar, no padding)
+  const fullscreenRoutes = ['/search']
+  const isFullscreen = fullscreenRoutes.some((r) => pathname.startsWith(r))
+
+  if (isFullscreen) {
+    return <>{children}</>
+  }
+
   return (
     <div className="min-h-screen relative">
-      {/* ── Custom Discover / Stories Button ── */}
-      <button
-        className="fixed z-60 top-[8px] md:top-6 right-4 md:right-8 group hover:scale-105 transition-all duration-300 outline-none"
-        aria-label="Discover"
+      {/* ── Custom Near Me Button (hidden on Near Me page) ── */}
+      {pathname !== '/near-me' && (
+      <Link
+        href="/near-me"
+        className="fixed z-60 top-[8px] md:top-6 right-4 md:right-8 group hover:scale-105 transition-all duration-300 outline-none block"
+        aria-label="Near Me"
       >
         <div className="relative w-8 h-8 md:w-[42px] md:h-[42px]">
           {/* Back left card */}
@@ -121,30 +138,35 @@ export function AppShell({
             </svg>
           </div>
         </div>
-      </button>
+      </Link>
+      )}
 
-      {/* Desktop: Fixed Sidebar */}
+      {/* Desktop: Fixed Sidebar — hide until hydrated to prevent flash */}
       {!isMobile && (
-        <Sidebar
-          isCollapsed={isCollapsed}
-          onToggle={handleToggleSidebar}
-          currentPath={currentPath}
-          userMode={userMode}
-          isLoggedIn={isLoggedIn}
-          userName={userName}
-          userAvatar={userAvatar}
-        />
+        <div className={cn(!isHydrated && 'opacity-0')} style={{ transition: 'none' }}>
+          <Sidebar
+            isCollapsed={isCollapsed}
+            onToggle={handleToggleSidebar}
+            currentPath={pathname}
+            userMode={userMode}
+            isLoggedIn={isLoggedIn}
+            userName={userName}
+            userAvatar={userAvatar}
+          />
+        </div>
       )}
 
       {/* Mobile: TopBar + Drawer Overlay */}
       {isMobile && (
         <>
-          <TopBar
-            onMenuToggle={handleToggleDrawer}
-            userAvatar={userAvatar}
-            userName={userName}
-            isLoggedIn={isLoggedIn}
-          />
+          {pathname !== '/near-me' && (
+            <TopBar
+              onMenuToggle={handleToggleDrawer}
+              userAvatar={userAvatar}
+              userName={userName}
+              isLoggedIn={isLoggedIn}
+            />
+          )}
 
           {/* Drawer Overlay */}
           {isDrawerOpen && (
@@ -158,7 +180,7 @@ export function AppShell({
                 <Sidebar
                   isCollapsed={false}
                   onToggle={() => setIsDrawerOpen(false)}
-                  currentPath={currentPath}
+                  currentPath={pathname}
                   userMode={userMode}
                   isLoggedIn={isLoggedIn}
                   userName={userName}
@@ -172,11 +194,15 @@ export function AppShell({
 
       {/* Main Content */}
       <main
-        className={cn('transition-all duration-300 ease-in-out', isMobile ? 'pt-[48px]' : '')}
+        className={cn(
+          'transition-[margin] duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)]',
+          (isMobile && pathname !== '/near-me') ? 'pt-[48px]' : '',
+        )}
         style={!isMobile ? { marginLeft: sidebarWidth } : undefined}
       >
-        <div className="mx-auto max-w-[980px] px-4 py-6">{children}</div>
+        <div className="px-6 pt-3 pb-6">{children}</div>
       </main>
     </div>
   )
 }
+

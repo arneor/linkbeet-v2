@@ -33,12 +33,28 @@ class AppSizes {
   /// Avatar / profile image — 32px
   static const double avatarSize = 32.0;
 
+  /// Small avatar / user indicator chip — 28px
+  static const double avatarSm = 28.0;
+
   // ── Icon sizes ────────────────────────────────────────────────────────────
   static const double iconXs = 12.0;
   static const double iconSm = 16.0;
   static const double iconMd = 22.0; // Search icon per DESIGN.md §4
   static const double iconLg = 24.0;
   static const double iconXl = 32.0;
+
+  /// Icon size for search / mic interactive icons — 20px
+  static const double iconAction = 20.0;
+
+  // ── Component-specific sizes ──────────────────────────────────────────────
+  /// Home screen search bar height — 62px
+  static const double searchBarHeight = 62.0;
+
+  /// Menu (hamburger) icon tap-area padding — 14px
+  static const double menuIconPadding = 14.0;
+
+  /// Active filter tab underline indicator height — 3px
+  static const double tabIndicatorHeight = 3.0;
 
   // ── Spacing scale (base 8px) ──────────────────────────────────────────────
   static const double px = 2.0;

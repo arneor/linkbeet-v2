@@ -67,6 +67,14 @@ class AppTheme {
 // Mirrors DESIGN.md §2 type scale. Tracking via letterSpacing.
 TextTheme _textTheme(ColorScheme colorScheme) {
   return TextTheme(
+    // headlineLarge → brand logotype (36px, 500) — LinkBeet wordmark in home hero
+    headlineLarge: TextStyle(
+      fontSize: AppFontSizes.logoTitle,
+      fontWeight: FontWeight.w500,
+      color: colorScheme.onSurface,
+      letterSpacing: -0.5,
+      height: 1.0,
+    ),
     // displayLarge → hero greeting (30px mobile, medium 500)
     displayLarge: TextStyle(
       fontSize: AppFontSizes.heroGreeting,

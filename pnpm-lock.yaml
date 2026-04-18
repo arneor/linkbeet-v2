@@ -411,6 +411,9 @@ importers:
       next:
         specifier: ^15.3.0
         version: 15.5.14(@babel/core@7.29.0)(@opentelemetry/api@1.9.1)(@playwright/test@1.59.1)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      pigeon-maps:
+        specifier: ^0.22.1
+        version: 0.22.1(react@19.2.4)
       react:
         specifier: ^19.2.4
         version: 19.2.4
@@ -5382,6 +5385,11 @@ packages:
   picomatch@4.0.4:
     resolution: {integrity: sha512-QP88BAKvMam/3NxH6vj2o21R6MjxZUAd6nlwAS/pnGvN9IVLocLHxGYIzFhg6fUQ+5th6P4dv4eW9jX3DSIj7A==}
     engines: {node: '>=12'}
+
+  pigeon-maps@0.22.1:
+    resolution: {integrity: sha512-mVWxgpIyhAekITeJvDGlFAo/Ytm6Fg7prpDiAuQ0Z6cJ/LwpnS8F0sF+0TDqyJu7C/DDHupkstFTNoIRqhdP5A==}
+    peerDependencies:
+      react: '*'
 
   pino-abstract-transport@3.0.0:
     resolution: {integrity: sha512-wlfUczU+n7Hy/Ha5j9a/gZNy7We5+cXp8YL+X+PG8S0KXxw7n/JXA3c46Y0zQznIJ83URJiwy7Lh56WLokNuxg==}
@@ -12199,6 +12207,10 @@ snapshots:
   picomatch@4.0.2: {}
 
   picomatch@4.0.4: {}
+
+  pigeon-maps@0.22.1(react@19.2.4):
+    dependencies:
+      react: 19.2.4
 
   pino-abstract-transport@3.0.0:
     dependencies:

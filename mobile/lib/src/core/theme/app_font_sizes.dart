@@ -8,6 +8,9 @@ class AppFontSizes {
   /// Discovery screen greeting headline (mobile = 30px per DESIGN.md)
   static const double heroGreeting = 30.0;
 
+  /// Brand name logotype in home hero (LinkBeet wordmark)
+  static const double logoTitle = 36.0;
+
   /// Major section headers
   static const double sectionHeading = 40.0;
 

@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:linkbeet/src/core/theme/app_colors.dart';
-import 'package:linkbeet/src/core/theme/app_font_sizes.dart';
+import 'package:linkbeet/src/core/theme/app_sizes.dart';
 import 'package:linkbeet/src/core/theme/app_spacing.dart';
+import 'package:linkbeet/src/core/theme/app_text_style.dart';
+
+// Vertical padding per row — sits between AppSizes.sm (8) and AppSizes.md (16)
+const _kItemPaddingV = 14.0;
+// Trending icon size — between iconSm (16) and iconMd (22)
+const _kTrendingIconSize = 18.0;
+// Divider indent = icon width + gap + horizontal padding = 24 + 16 + 16
+const _kDividerIndent = AppSizes.iconLg + AppSizes.md + AppSizes.md;
 
 class DsHomeTrendingList extends StatelessWidget {
   const DsHomeTrendingList({
@@ -18,70 +26,75 @@ class DsHomeTrendingList extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Header
-        const Padding(
-          padding: EdgeInsets.fromLTRB(16, 16, 16, 0),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(AppSizes.md, AppSizes.md, AppSizes.md, 0),
           child: Text(
             'Trending Searches',
-            style: TextStyle(
-              fontSize: AppFontSizes.caption,
+            style: AppTextStyle.bodySmall(context)?.copyWith(
               fontWeight: FontWeight.w600,
               color: AppColors.textPrimary,
             ),
           ),
         ),
-        // Items
         ...items.asMap().entries.map((entry) {
           final index = entry.key;
           final label = entry.value;
           return Column(
             children: [
-              InkWell(
-                onTap: () => onItemTap(label),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 14,
-                  ),
-                  child: Row(
-                    children: [
-                      // Trending icon — 24px, no bg circle on mobile
-                      // (matches web: md:w-[32px] md:h-[32px] md:rounded-full md:bg-slate-100
-                      //  vs mobile: just 24px icon)
-                      const SizedBox(
-                        width: 24,
-                        height: 24,
-                        child: Icon(
-                          Icons.trending_up_rounded,
-                          size: 18,
-                          color: AppColors.textPlaceholder,
-                        ),
-                      ),
-                      AppSpacing.horizontalGap16,
-                      Expanded(
-                        child: Text(
-                          label,
-                          style: const TextStyle(
-                            fontSize: AppFontSizes.bodySmall,
-                            fontWeight: FontWeight.w400,
-                            color: AppColors.textSecondary,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+              _TrendingItem(label: label, onTap: () => onItemTap(label)),
               if (index < items.length - 1)
                 Container(
-                  height: 1,
-                  margin: const EdgeInsets.only(left: 56),
+                  height: AppSizes.dividerHeight,
+                  margin: const EdgeInsets.only(left: _kDividerIndent),
                   color: AppColors.border,
                 ),
             ],
           );
         }),
       ],
+    );
+  }
+}
+
+class _TrendingItem extends StatelessWidget {
+  const _TrendingItem({required this.label, required this.onTap});
+
+  final String label;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSizes.md,
+          vertical: _kItemPaddingV,
+        ),
+        child: Row(
+          children: [
+            // No bg circle on mobile — matches web md:rounded-full md:bg-slate-100
+            const SizedBox(
+              width: AppSizes.iconLg,
+              height: AppSizes.iconLg,
+              child: Icon(
+                Icons.trending_up_rounded,
+                size: _kTrendingIconSize,
+                color: AppColors.textPlaceholder,
+              ),
+            ),
+            AppSpacing.horizontalGap16,
+            Expanded(
+              child: Text(
+                label,
+                style: AppTextStyle.bodyMedium(context)?.copyWith(
+                  color: AppColors.textSecondary,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
