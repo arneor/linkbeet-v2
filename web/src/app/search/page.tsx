@@ -1,12 +1,13 @@
 'use client'
 
-import { useState, useEffect } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
-import { SEARCH_RESULTS } from '@/data/search'
+import { Suspense, useState, useEffect } from 'react'
+
 import { SearchHeader, ResultsList, DesktopSidebar } from '@/components/search'
 import { MapBlock } from '@/components/search/MapBlock'
+import { SEARCH_RESULTS } from '@/data/search'
 
-export default function SearchResultsPage() {
+function SearchResults() {
   const searchParams = useSearchParams()
   const router = useRouter()
   const [query, setQuery] = useState(searchParams.get('q') || '')
@@ -14,6 +15,7 @@ export default function SearchResultsPage() {
   const [hoveredId, setHoveredId] = useState(SEARCH_RESULTS[0].id)
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setQuery(searchParams.get('q') || '')
   }, [searchParams])
 
@@ -49,12 +51,16 @@ export default function SearchResultsPage() {
           hoveredId={hoveredId}
           onHover={setHoveredId}
         />
-        <DesktopSidebar
-          results={SEARCH_RESULTS}
-          hoveredId={hoveredId}
-          onHover={setHoveredId}
-        />
+        <DesktopSidebar results={SEARCH_RESULTS} hoveredId={hoveredId} onHover={setHoveredId} />
       </div>
     </div>
+  )
+}
+
+export default function SearchResultsPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-white" />}>
+      <SearchResults />
+    </Suspense>
   )
 }

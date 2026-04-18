@@ -1,7 +1,7 @@
 'use client'
 
-import { useState, useRef, useEffect } from 'react'
 import { cn } from '@linkbeet/utils'
+import { useState, useRef, useEffect } from 'react'
 
 const BANNERS = [
   {
@@ -75,38 +75,46 @@ export function PromoBanner() {
       const nextIndex = isLast ? 0 : activeIndex + 1
       scrollToSlide(nextIndex)
     }, 5000)
-    
+
     return () => clearInterval(timer)
   }, [activeIndex])
 
   return (
     <div className="relative mb-6">
-      <div 
+      <div
         ref={scrollRef}
         onScroll={handleScroll}
         className="flex overflow-x-auto snap-x snap-mandatory rounded-[12px] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
       >
         {BANNERS.map((banner) => (
-          <div 
+          <div
             key={banner.id}
-            className={cn("relative w-full shrink-0 snap-center p-6 overflow-hidden", banner.bgColor)}
+            className={cn(
+              'relative w-full shrink-0 snap-center p-6 overflow-hidden',
+              banner.bgColor,
+            )}
           >
             <div className="relative z-10 w-2/3 md:w-3/4">
-              <h2 className="text-[20px] md:text-[22px] font-bold text-white tracking-tight mb-1">{banner.title}</h2>
+              <h2 className="text-[20px] md:text-[22px] font-bold text-white tracking-tight mb-1">
+                {banner.title}
+              </h2>
               <p className="text-[13px] md:text-[14px] text-white/90 mb-4 line-clamp-2">
                 {banner.desc}
               </p>
-              <button 
+              <button
                 className={cn(
-                  "px-4 md:px-5 py-2 bg-white text-[13px] md:text-[14px] font-semibold rounded-full hover:bg-slate-50 transition-colors shadow-sm",
-                  banner.textColor
+                  'px-4 md:px-5 py-2 bg-white text-[13px] md:text-[14px] font-semibold rounded-full hover:bg-slate-50 transition-colors shadow-sm',
+                  banner.textColor,
                 )}
               >
                 {banner.btnText}
               </button>
             </div>
-            
-            <div className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 opacity-[0.15] md:opacity-20 pointer-events-none" aria-hidden="true">
+
+            <div
+              className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 opacity-[0.15] md:opacity-20 pointer-events-none"
+              aria-hidden="true"
+            >
               {banner.icon}
             </div>
           </div>
@@ -120,8 +128,8 @@ export function PromoBanner() {
             key={idx}
             onClick={() => scrollToSlide(idx)}
             className={cn(
-              "w-[6px] h-[6px] rounded-full transition-all duration-300",
-              activeIndex === idx ? "bg-white w-[18px]" : "bg-white/50 hover:bg-white/70"
+              'w-[6px] h-[6px] rounded-full transition-all duration-300',
+              activeIndex === idx ? 'bg-white w-[18px]' : 'bg-white/50 hover:bg-white/70',
             )}
             aria-label={`Go to slide ${idx + 1}`}
           />

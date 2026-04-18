@@ -1,8 +1,9 @@
 'use client'
 
 import { Map, Overlay } from 'pigeon-maps'
-import type { SearchResult } from '@/data/types'
+
 import { MAP_CENTER, MAP_YOU_PIN } from '@/data/search'
+import type { SearchResult } from '@/data/types'
 
 interface MapBlockProps {
   results: SearchResult[]
@@ -48,8 +49,8 @@ export function MapBlock({
                       ? 'w-9 h-9 bg-slate-900 scale-110 z-20'
                       : 'w-8 h-8 bg-accent scale-110 z-10'
                     : showPopovers
-                    ? 'w-7 h-7 bg-accent hover:scale-110 z-10'
-                    : 'w-6 h-6 bg-accent hover:scale-110'
+                      ? 'w-7 h-7 bg-accent hover:scale-110 z-10'
+                      : 'w-6 h-6 bg-accent hover:scale-110'
                 }`}
                 onClick={() => onHover(res.id)}
                 onMouseEnter={() => onHover(res.id)}

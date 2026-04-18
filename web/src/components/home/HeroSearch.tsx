@@ -1,8 +1,9 @@
 'use client'
 
-import React, { useState } from 'react'
 import { ArrowRight, Mic, TrendingUp } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+import React, { useState } from 'react'
+
 import { SearchInput } from '@/components/ui'
 import { TRENDING } from '@/data/trending'
 

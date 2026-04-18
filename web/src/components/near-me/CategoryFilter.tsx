@@ -16,10 +16,11 @@ export function CategoryFilter({ categories, activeIndex, onChange }: CategoryFi
           key={cat.label}
           id={`category-${cat.label.toLowerCase()}`}
           onClick={() => onChange(i)}
-          className={`flex items-center justify-center gap-1.5 px-4 py-2 shrink-0 snap-center text-[13px] font-medium rounded-full border transition-all duration-150 active:scale-95 ${i === activeIndex
+          className={`flex items-center justify-center gap-1.5 px-4 py-2 shrink-0 snap-center text-[13px] font-medium rounded-full border transition-all duration-150 active:scale-95 ${
+            i === activeIndex
               ? 'bg-accent text-white border-accent'
               : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
-            }`}
+          }`}
         >
           <span>{cat.icon}</span>
           {cat.label}

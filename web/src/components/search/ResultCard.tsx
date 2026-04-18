@@ -1,8 +1,8 @@
 'use client'
 
-import type { SearchResult } from '@/data/types'
 import { StarIcon } from '@/components/ui/StarIcon'
 import { VerifiedIcon } from '@/components/ui/VerifiedIcon'
+import type { SearchResult } from '@/data/types'
 
 interface ResultCardProps {
   item: SearchResult
@@ -27,13 +27,9 @@ export function ResultCard({ item, isActive, onHover }: ResultCardProps) {
             <h3 className="text-[16px] font-semibold text-slate-900 tracking-tight leading-snug truncate">
               {item.name}
             </h3>
-            {item.isVerified && (
-              <VerifiedIcon className="w-[18px] h-[18px] text-accent shrink-0" />
-            )}
+            {item.isVerified && <VerifiedIcon className="w-[18px] h-[18px] text-accent shrink-0" />}
           </div>
-          <p className="text-[13px] text-link truncate group-hover:underline">
-            {item.handle}
-          </p>
+          <p className="text-[13px] text-link truncate group-hover:underline">{item.handle}</p>
         </div>
       </div>
 
@@ -52,9 +48,7 @@ export function ResultCard({ item, isActive, onHover }: ResultCardProps) {
           {item.isOpenNow ? (
             <span className="text-[13px] font-medium text-emerald-600">Open now</span>
           ) : (
-            <span className="text-[13px] font-medium text-red-500">
-              Closes {item.closingTime}
-            </span>
+            <span className="text-[13px] font-medium text-red-500">Closes {item.closingTime}</span>
           )}
         </div>
 

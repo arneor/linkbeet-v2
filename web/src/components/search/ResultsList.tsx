@@ -1,7 +1,8 @@
-import type { SearchResult } from '@/data/types'
-import { ResultCard } from './ResultCard'
 import { PeopleAlsoSearch } from './PeopleAlsoSearch'
+import { ResultCard } from './ResultCard'
 import { TopPickCard } from './TopPickCard'
+
+import type { SearchResult } from '@/data/types'
 
 interface ResultsListProps {
   query: string

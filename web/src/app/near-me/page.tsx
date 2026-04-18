@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { CATEGORIES, TOP_RATED, ALL_NEARBY, TRENDING_OFFERS, RECENTLY_VIEWED } from '@/data/near-me'
+
 import {
   NearMeTopBar,
   NearMeMobileHeader,
@@ -9,6 +9,7 @@ import {
   NearMeMain,
   NearMeSidebar,
 } from '@/components/near-me'
+import { CATEGORIES, TOP_RATED, ALL_NEARBY, TRENDING_OFFERS, RECENTLY_VIEWED } from '@/data/near-me'
 
 export default function NearMePage() {
   const [activeCategory, setActiveCategory] = useState(0)
@@ -35,10 +36,7 @@ export default function NearMePage() {
           />
         </div>
         <div className="hidden lg:block w-full lg:w-[30%] h-full overflow-y-auto pr-2 pb-8 custom-scrollbar">
-          <NearMeSidebar
-            trendingOffers={TRENDING_OFFERS}
-            recentlyViewed={RECENTLY_VIEWED}
-          />
+          <NearMeSidebar trendingOffers={TRENDING_OFFERS} recentlyViewed={RECENTLY_VIEWED} />
         </div>
       </div>
     </>

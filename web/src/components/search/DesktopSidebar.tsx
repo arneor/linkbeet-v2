@@ -1,9 +1,10 @@
 'use client'
 
-import type { SearchResult } from '@/data/types'
 import { MapBlock } from './MapBlock'
 import { PeopleAlsoSearch } from './PeopleAlsoSearch'
 import { TopPickCard } from './TopPickCard'
+
+import type { SearchResult } from '@/data/types'
 
 interface DesktopSidebarProps {
   results: SearchResult[]

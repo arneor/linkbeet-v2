@@ -1,7 +1,8 @@
-import type { TrendingOffer, RecentlyViewedItem } from '@/data/types'
 import { QuickActions } from './QuickActions'
-import { TrendingOffers } from './TrendingOffers'
 import { RecentlyViewed } from './RecentlyViewed'
+import { TrendingOffers } from './TrendingOffers'
+
+import type { TrendingOffer, RecentlyViewedItem } from '@/data/types'
 
 interface NearMeSidebarProps {
   trendingOffers: TrendingOffer[]

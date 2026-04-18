@@ -85,7 +85,16 @@ const navItems: NavItem[] = [
     label: 'Bookmarks',
     href: '/bookmarks',
     icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <svg
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
         <path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z" />
       </svg>
     ),
@@ -293,8 +302,12 @@ export function Sidebar({
             )}
             {!isCollapsed && (
               <div className="flex flex-col min-w-0">
-                <span className="text-[13px] font-medium text-slate-900 truncate">{userName || 'Nidhin'}</span>
-                <span className="text-[11px] text-slate-500 truncate">{userMode === 'business' ? 'Business Mode' : 'Normal Mode'}</span>
+                <span className="text-[13px] font-medium text-slate-900 truncate">
+                  {userName || 'Nidhin'}
+                </span>
+                <span className="text-[11px] text-slate-500 truncate">
+                  {userMode === 'business' ? 'Business Mode' : 'Normal Mode'}
+                </span>
               </div>
             )}
           </div>

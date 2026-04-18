@@ -1,4 +1,10 @@
-import type { Category, TopRatedItem, AllNearbyItem, TrendingOffer, RecentlyViewedItem } from './types'
+import type {
+  Category,
+  TopRatedItem,
+  AllNearbyItem,
+  TrendingOffer,
+  RecentlyViewedItem,
+} from './types'
 
 export const CATEGORIES: Category[] = [
   { icon: '⊞', label: 'All' },
@@ -129,7 +135,31 @@ export const TRENDING_OFFERS: TrendingOffer[] = [
 ]
 
 export const RECENTLY_VIEWED: RecentlyViewedItem[] = [
-  { id: 'r1', name: 'Spice Kitchen', category: 'Restaurant', distanceKm: 0.9, rating: 4.5, avatarColor: '#FFCA80', bioLink: 'linkbeet.in/spicekitchen' },
-  { id: 'r2', name: 'Glow Beauty Lounge', category: 'Saloon', distanceKm: 1.4, rating: 4.6, avatarColor: '#80D4A0', bioLink: 'linkbeet.in/glowbeautylounge' },
-  { id: 'r3', name: 'FitZone Gym', category: 'Fitness', distanceKm: 0.5, rating: 4.7, avatarColor: '#D1B8E8', bioLink: 'linkbeet.in/fitzone' },
+  {
+    id: 'r1',
+    name: 'Spice Kitchen',
+    category: 'Restaurant',
+    distanceKm: 0.9,
+    rating: 4.5,
+    avatarColor: '#FFCA80',
+    bioLink: 'linkbeet.in/spicekitchen',
+  },
+  {
+    id: 'r2',
+    name: 'Glow Beauty Lounge',
+    category: 'Saloon',
+    distanceKm: 1.4,
+    rating: 4.6,
+    avatarColor: '#80D4A0',
+    bioLink: 'linkbeet.in/glowbeautylounge',
+  },
+  {
+    id: 'r3',
+    name: 'FitZone Gym',
+    category: 'Fitness',
+    distanceKm: 0.5,
+    rating: 4.7,
+    avatarColor: '#D1B8E8',
+    bioLink: 'linkbeet.in/fitzone',
+  },
 ]

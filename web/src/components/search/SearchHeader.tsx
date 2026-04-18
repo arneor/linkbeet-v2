@@ -1,8 +1,9 @@
 'use client'
 
 import Image from 'next/image'
-import { SearchInput } from '@/components/ui/SearchInput'
+
 import { LocationChip } from '@/components/ui/LocationChip'
+import { SearchInput } from '@/components/ui/SearchInput'
 import { FILTERS } from '@/data/search'
 
 interface SearchHeaderProps {
@@ -32,7 +33,13 @@ export function SearchHeader({
       <div className="px-3 md:px-4 lg:px-12 xl:px-20 h-[64px] flex items-center gap-2 sm:gap-4 lg:gap-6">
         {/* Mobile Back Button */}
         <button onClick={onBack} className="sm:hidden p-1 text-slate-800 shrink-0">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-5 h-5">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            className="w-5 h-5"
+          >
             <path d="M19 12H5M12 19l-7-7 7-7" />
           </svg>
         </button>
@@ -68,18 +75,32 @@ export function SearchHeader({
               onClick={() => onQueryChange('')}
               className={`text-slate-400 hover:text-slate-600 ${query ? 'opacity-100' : 'opacity-0'} transition-opacity`}
             >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-4 h-4">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                className="w-4 h-4"
+              >
                 <line x1="18" y1="6" x2="6" y2="18" />
                 <line x1="6" y1="6" x2="18" y2="18" />
               </svg>
             </button>
             <div className="w-px h-5 bg-slate-200 mx-1 hidden sm:block" />
             <button
-              onClick={() => { if (query.trim()) onSearch(query) }}
+              onClick={() => {
+                if (query.trim()) onSearch(query)
+              }}
               className="text-accent p-1.5 rounded-full hover:bg-accent/10 transition-colors"
               aria-label="Search"
             >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-5 h-5">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                className="w-5 h-5"
+              >
                 <circle cx="11" cy="11" r="8" />
                 <path d="m21 21-4.35-4.35" />
               </svg>
@@ -98,7 +119,13 @@ export function SearchHeader({
         {/* Right controls */}
         <div className="flex items-center gap-2 sm:gap-3 shrink-0">
           <button className="flex w-8 h-8 sm:w-10 sm:h-10 items-center justify-center rounded-full hover:bg-slate-100 transition-colors text-slate-600">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-[20px] h-[20px]">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              className="w-[20px] h-[20px]"
+            >
               <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
               <path d="M13.73 21a2 2 0 0 1-3.46 0" />
             </svg>
