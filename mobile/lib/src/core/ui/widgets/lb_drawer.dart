@@ -5,6 +5,7 @@ import 'package:linkbeet/src/core/theme/app_colors.dart';
 import 'package:linkbeet/src/core/theme/app_font_sizes.dart';
 import 'package:linkbeet/src/core/theme/app_sizes.dart';
 import 'package:linkbeet/src/core/theme/app_spacing.dart';
+import 'package:linkbeet/src/modules/auth/presentation/router/auth_router_module.dart';
 
 // ── Nav items — mirrors web/src/components/layout/Sidebar.tsx ──────────────
 class _NavItem {
@@ -110,6 +111,7 @@ class LbDrawer extends StatelessWidget {
                   : _LoginButton(
                       onTap: () {
                         onClose?.call();
+                        const SignInRoute().push(context);
                       },
                     ),
             ),

@@ -90,7 +90,7 @@ export function AppShell({
   const sidebarWidth = isCollapsed ? 72 : 260
 
   // Routes that get their own full-screen layout (no sidebar, no padding)
-  const fullscreenRoutes = ['/search']
+  const fullscreenRoutes = ['/search', '/auth']
   const isFullscreen = fullscreenRoutes.some((r) => pathname.startsWith(r))
 
   if (isFullscreen) {

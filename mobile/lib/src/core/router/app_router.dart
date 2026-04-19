@@ -9,6 +9,8 @@ import 'package:linkbeet/src/modules/search/presentation/router/search_router_mo
     as search_router;
 import 'package:linkbeet/src/modules/near_me/presentation/router/near_me_router_module.dart'
     as near_me_router;
+import 'package:linkbeet/src/modules/auth/presentation/router/auth_router_module.dart'
+    as auth_router;
 
 // This GlobalKey is used for the root navigator (e.g. for simple dialogs on top of everything)
 final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -29,6 +31,9 @@ final GoRouter appRouter = GoRouter(
 
     // near me screen
     ...near_me_router.$appRoutes,
+
+    // auth — sign in / sign up / industry
+    ...auth_router.$appRoutes,
   ],
   errorBuilder: (context, state) =>
       Scaffold(body: Center(child: Text('Error: ${state.error}'))),

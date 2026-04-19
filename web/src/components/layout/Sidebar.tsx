@@ -313,7 +313,7 @@ export function Sidebar({
           </div>
         ) : (
           <Link
-            href="/login"
+            href="/auth/signin"
             className={cn(
               'flex items-center justify-center gap-2 h-[44px] rounded-[8px] bg-accent text-white text-[14px] font-normal transition-colors hover:bg-accent-hover shrink-0',
               isCollapsed && 'w-[44px] h-[44px] mx-auto rounded-full',

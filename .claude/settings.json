@@ -4,7 +4,10 @@
       "Skill(gsd-discuss-phase)",
       "Skill(gsd-discuss-phase:*)",
       "Bash(dart run *)",
-      "Bash(sips -g pixelWidth -g pixelHeight assets/images/true-black-logo.png assets/images/logo-splash-padded.png assets/images/black-logo.png)"
+      "Bash(sips -g pixelWidth -g pixelHeight assets/images/true-black-logo.png assets/images/logo-splash-padded.png assets/images/black-logo.png)",
+      "Bash(pnpm exec *)",
+      "Bash(pnpm dev *)",
+      "Read(//private/tmp/**)"
     ]
   }
 }
